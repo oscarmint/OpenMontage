@@ -1,3 +1,5 @@
+import wtRaw from './wordtimes.json';
+const WT = wtRaw as Record<string, number[]>;
 export const FPS = 24;
 export const N = 1073;
 export const sec = (t: number) => Math.round(t * FPS);
@@ -17,7 +19,8 @@ const build = (id: string, t0: number, t1: number, ch: string[][], glitchFirst =
   const wts = all.map((w) => syl(w) + (/[,.]$|\*[,.]$/.test(w) ? 0.7 : 0));
   const tot = wts.reduce((a, b) => a + b, 0);
   let acc = 0;
-  const times = all.map((_, i) => { const s = t0 + ((t1 - t0) * acc) / tot; acc += wts[i]; return s; });
+  const heur = all.map((_, i) => { const s = t0 + ((t1 - t0) * acc) / tot; acc += wts[i]; return s; });
+  const times = WT[id] && WT[id].length === all.length ? WT[id] : heur;
   let k = 0;
   const chunks: Chunk[] = ch.map((c, ci) => {
     const words = c.map((w) => {
@@ -43,12 +46,13 @@ export const PHRASES: Phrase[] = [
   build('m2', 29.0, 36.0, [['*Registra*', 'cada', '*serie*'], ['con', 'su', 'peso'], ['y', 'mira', 'tu', '*progreso*'], ['en', 'el', 'calendario.'], ['Así', 'siempre', 'sabes'], ['qué', 'sigue.']]),
   build('v13', 36.2, 41.53, [['*Pruébala*', '7', 'días', '*gratis*,'], ['sin', 'registrar', 'tu', 'tarjeta,'], ['y', 'si', 'te', 'gusta,'], ['es', 'un', '*pago*', '*único*']]),
 ];
+export const IMPACT_FRAMES: number[] = PHRASES.flatMap((p) => p.chunks.flatMap((c) => c.words.filter((w) => w.imp).map((w) => w.f)));
 export const wordFrame = (pid: string, ci: number, wi: number) => PHRASES.find((p) => p.id === pid)!.chunks[ci].words[wi].f;
 
 export const CUTS = {wipes: [46, 154, 228, 866], irisO: 91, logo: 293, punch: 348, calendar: 806, end: 1006};
 export const DEPTH = [
-  {word: 'EVO', f0: 7, f1: 94, size: 400, y: 860, kind: 'wipe'},
-  {word: 'TÉCNICA', f0: 158, f1: 228, size: 190, y: 760, kind: 'glitch'},
-  {word: 'RUMBO', f0: 490, f1: 612, size: 270, y: 880, kind: 'rise'},
-  {word: 'REGISTRAR', f0: 696, f1: 806, size: 150, y: 780, kind: 'wipe'},
+  {word: 'EVO', f0: 7, f1: 94, size: 430, y: 640, kind: 'wipe'},
+  {word: 'TÉCNICA', f0: 158, f1: 228, size: 200, y: 640, kind: 'glitch'},
+  {word: 'RUMBO', f0: 490, f1: 612, size: 285, y: 720, kind: 'wipe'},
+  {word: 'REGISTRAR', f0: 696, f1: 806, size: 160, y: 680, kind: 'wipe'},
 ];

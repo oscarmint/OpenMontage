@@ -1,14 +1,30 @@
 import React from 'react';
 import {AbsoluteFill, Easing, OffthreadVideo, interpolate, spring, staticFile, useCurrentFrame} from 'remotion';
-import {CUTS, FPS, GRAY, INK, LIME, LIME_D, PHRASES, TXT, wordFrame} from './data';
+import {CUTS, FPS, GRAY, IMPACT_FRAMES, INK, LIME, LIME_D, PHRASES, TXT, wordFrame} from './data';
 import {useFonts} from './Fonts';
 import anchorsRaw from './anchors.json';
+import camRaw from './cam.json';
 
 const anchors = anchorsRaw as Record<string, number[]>;
 const ease = Easing.bezier(0.16, 1, 0.3, 1);
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const anchorAt = (f: number): number[] | null => { for (let d = 0; d < 12; d++) { const a = anchors[String(f - d)] || anchors[String(f + d)]; if (a) return a; } return null; };
 const pop = (l: number, damping = 10, stiffness = 190) => spring({frame: Math.max(0, l), fps: FPS, config: {damping, stiffness, mass: 0.7}});
+
+/* ---------------- Camera ---------------- */
+const camData = camRaw as Record<string, number[]>;
+const phoneC = (f: number): number[] | null => { let sx = 0, sy = 0, n = 0; for (let d = -3; d <= 3; d++) { const a = camData[String(f + d)]; if (a) { sx += a[0]; sy += a[1]; n++; } } return n ? [sx / n, sy / n] : null; };
+const pulseAt = (f: number) => { let p = 0; for (const wf of IMPACT_FRAMES) { if (f >= wf && f < wf + 10) p = Math.max(p, Math.exp(-(f - wf) / 3.5)); } return p; };
+const camera = (f: number) => {
+  const s0 = f >= 293 && f < 490 ? interpolate(f, [296, 330, 456, 488], [1, 1.55, 1.55, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)}) : 1;
+  const w = (s0 - 1) / 0.55; const P = phoneC(f) || [540, 960];
+  const s = s0 * (1 + 0.018 * pulseAt(f));
+  const Sx = P[0] + (540 - P[0]) * w, Sy = P[1] + (880 - P[1]) * w;
+  return {s, tx: Sx - s * P[0], ty: Sy - s * P[1], w};
+};
+type Cam = ReturnType<typeof camera>;
+const proj = (c: Cam, x: number, y: number) => [c.s * x + c.tx, c.s * y + c.ty];
+const btnPos = () => { const an = anchorAt(790) || [200, 500, 800, 1500]; return {left: clamp(an[2] - 150, 540, 700), top: clamp(an[1] + 330, 520, 980)}; };
 
 /* ---------------- Subtitles ---------------- */
 const Subtitles = () => {
@@ -17,18 +33,24 @@ const Subtitles = () => {
   const y = inCal ? 330 : 1250;
   const items: React.ReactNode[] = [];
   PHRASES.forEach((p) => p.chunks.forEach((c, ci) => {
-    if (f < c.f0 || f >= c.f1) return;
+    if (f < c.f0 || f >= c.f1 + 10) return;
     const l0 = f - c.f0;
-    const exit = interpolate(f, [c.f1 - 4, c.f1], [1, 0], {extrapolateLeft: 'clamp'});
-    const gl = c.glitch && l0 < 4;
+    const gl = c.glitch && l0 >= 0 && l0 < 4;
     items.push(
-      <div key={p.id + ci} style={{position: 'absolute', left: 70, width: 940, top: y, transform: `translate(${gl ? [-9, 7, -4, 2][l0] : 0}px,-50%)`, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'baseline', gap: '4px 22px', opacity: exit, fontFamily: 'Poppins', textShadow: gl ? `-7px 0 ${LIME}, 7px 0 rgba(255,255,255,0.55)` : undefined}}>
+      <div key={p.id + ci} style={{position: 'absolute', left: 70, width: 940, top: y, transform: `translate(${gl ? [-9, 7, -4, 2][l0] : 0}px,-50%)`, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'baseline', gap: '4px 22px', fontFamily: 'Poppins', textShadow: gl ? `-7px 0 ${LIME}, 7px 0 rgba(255,255,255,0.55)` : undefined}}>
         {c.words.map((w, wi) => {
           const l = f - w.f;
-          const p1 = ease(clamp(l / 7));
-          const sc = w.imp ? 0.72 + 0.28 * pop(l, 8, 200) : 1;
+          const ex = clamp((f - (c.f1 - 2) - wi * 0.8) / 6);
+          const pIn = ease(clamp(l / 7));
+          const sc = w.imp ? 0.8 + 0.2 * pop(l, 8, 200) : 1;
+          const rv = w.imp ? clamp(l / 9) : 1;
+          const X = rv * 125;
+          const clip = w.imp ? `polygon(0 -20%, ${X}% -20%, ${X - 24}% 120%, 0 120%)` : undefined;
           return (
-            <span key={wi} style={{display: 'inline-block', opacity: clamp(l / 5), transform: `translateY(${(1 - p1) * 28}px) scale(${sc})`, filter: `blur(${(1 - p1) * 8}px)`, fontWeight: w.imp ? 800 : 700, fontSize: w.imp ? 118 : 74, lineHeight: 1.15, color: w.imp ? LIME : TXT, textShadow: gl ? undefined : w.imp ? '0 0 26px rgba(151,209,49,0.55), 0 4px 18px rgba(0,0,0,0.6)' : '0 3px 16px rgba(0,0,0,0.7)'}}>{w.t}</span>
+            <span key={wi} style={{position: 'relative', display: 'inline-block', opacity: clamp(l / 4) * (1 - ex), transform: `translateY(${(1 - pIn) * 30 - ex * 52}px) scale(${sc})`, filter: `blur(${(w.imp ? 0 : (1 - pIn) * 8) + ex * 7}px)`}}>
+              <span style={{display: 'inline-block', clipPath: clip, fontWeight: w.imp ? 800 : 700, fontSize: w.imp ? 118 : 74, lineHeight: 1.15, color: w.imp ? LIME : TXT, textShadow: gl ? undefined : w.imp ? '0 0 26px rgba(151,209,49,0.55), 0 4px 18px rgba(0,0,0,0.6)' : '0 3px 16px rgba(0,0,0,0.7)'}}>{w.t}</span>
+              {w.imp && rv < 1 ? <span style={{position: 'absolute', top: '10%', bottom: '10%', left: `${X - 14}%`, width: 8, transform: 'skewX(-14deg)', background: '#e8ffb0', boxShadow: `0 0 18px 5px ${LIME}`}} /> : null}
+            </span>
           );
         })}
       </div>
@@ -107,42 +129,70 @@ const HudRow = () => {
   }
   /* C: C09 registrar button */
   {
-    const w = win(f, 712, 806);
+    const w = win(f, 712, 793);
     if (w.on) {
-      const an = anchorAt(f) || [200, 500, 800, 1500];
-      const left = clamp(an[2] - 150, 540, 700), top = clamp(an[1] + 330, 520, 980);
+      const {left, top} = btnPos();
       const press = f >= 756 && f < 760 ? 0.94 : 1, done = f >= 760;
       const rl = f - 756;
       out.push(<React.Fragment key="C">
-        <div style={{position: 'absolute', left, top, opacity: w.o, transform: `scale(${(0.8 + 0.2 * ease(clamp(w.l / 10))) * press})`, transformOrigin: 'left top', padding: '20px 30px', borderRadius: 26, background: LIME, color: INK, fontFamily: 'Poppins', fontWeight: 700, fontSize: 36, boxShadow: `0 8px 0 ${LIME_D}, 0 0 40px rgba(151,209,49,0.5)`}}>{done ? '✓ Serie 1 registrada' : 'Registrar serie 1'}</div>
+        <div style={{position: 'absolute', left, top, opacity: f > 790 ? 1 : w.o, transform: `scale(${(0.8 + 0.2 * ease(clamp(w.l / 10))) * press})`, transformOrigin: 'left top', padding: '20px 30px', borderRadius: 26, background: LIME, color: INK, fontFamily: 'Poppins', fontWeight: 700, fontSize: 36, boxShadow: `0 8px 0 ${LIME_D}, 0 0 40px rgba(151,209,49,0.5)`}}>{done ? '✓ Serie 1 registrada' : 'Registrar serie 1'}</div>
         {rl >= 0 && rl < 16 ? <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}><circle cx={left + 140} cy={top + 40} r={20 + rl * 14} fill="none" stroke={LIME} strokeWidth={5} opacity={1 - rl / 16} /></svg> : null}
       </React.Fragment>);
     }
   }
-  /* D: C05 chips */
+  /* D: C05 chips (follow the camera) */
   {
+    const cm = camera(f);
     const fi = wordFrame('v7a', 0, 2), fn = wordFrame('v7a', 2, 2);
     const w1 = win(f, fi, fi + 54), w2 = win(f, fn, fn + 60);
-    if (w1.on) out.push(<React.Fragment key="D1"><Leader x1={800} y1={640} x2={690} y2={740} o={w1.o} f={f} />
-      <div style={{position: 'absolute', left: 780, top: 590, opacity: w1.o, transform: `scale(${0.7 + 0.3 * pop(w1.l)})`, padding: '10px 26px', borderRadius: 18, background: 'rgba(26,32,41,0.8)', border: `2px solid ${LIME}`, color: LIME, fontFamily: 'Poppins', fontWeight: 800, fontSize: 52, boxShadow: '0 0 30px rgba(151,209,49,0.45)'}}>IA</div></React.Fragment>);
-    if (w2.on) out.push(<React.Fragment key="D2"><Leader x1={330} y1={930} x2={400} y2={960} o={w2.o} f={f} />
-      <Glass left={50} top={850} w={300} o={w2.o} sc={0.88 + 0.12 * ease(clamp(w2.l / 10))}><div style={{fontSize: 20, color: GRAY, letterSpacing: 3, fontWeight: 600}}>TU RUTINA</div><div style={{fontSize: 34, fontWeight: 800}}>Nivel · Meta</div></Glass></React.Fragment>);
+    if (w1.on) { const [px, py] = proj(cm, 700, 720), [cx, cy] = proj(cm, 800, 620);
+      out.push(<React.Fragment key="D1"><Leader x1={cx} y1={cy + 40} x2={px} y2={py} o={w1.o} f={f} />
+      <div style={{position: 'absolute', left: cx - 10, top: cy - 30, opacity: w1.o, transform: `scale(${0.7 + 0.3 * pop(w1.l)})`, padding: '10px 26px', borderRadius: 18, background: 'rgba(26,32,41,0.8)', border: `2px solid ${LIME}`, color: LIME, fontFamily: 'Poppins', fontWeight: 800, fontSize: 52, boxShadow: '0 0 30px rgba(151,209,49,0.45)'}}>IA</div></React.Fragment>); }
+    if (w2.on) { const [px, py] = proj(cm, 400, 960), [cx, cy] = proj(cm, 60, 850);
+      out.push(<React.Fragment key="D2"><Leader x1={Math.min(cx + 300, px - 20)} y1={cy + 90} x2={px} y2={py} o={w2.o} f={f} />
+      <Glass left={Math.max(24, cx)} top={cy} w={300} o={w2.o} sc={0.88 + 0.12 * ease(clamp(w2.l / 10))}><div style={{fontSize: 20, color: GRAY, letterSpacing: 3, fontWeight: 600}}>TU RUTINA</div><div style={{fontSize: 34, fontWeight: 800}}>Nivel · Meta</div></Glass></React.Fragment>); }
   }
   /* E: C10 pills */
   {
     const fg = wordFrame('v13', 0, 3), fp = wordFrame('v13', 3, 2);
     const w1 = win(f, fg, CUTS.end - 6), w2 = win(f, fp, CUTS.end - 6);
     if (w1.on) out.push(<div key="E1" style={{position: 'absolute', left: 0, width: 1080, top: 1475, display: 'flex', justifyContent: 'center', opacity: w1.o, transform: `translateY(${(1 - ease(clamp(w1.l / 9))) * 40}px)`}}><div style={{padding: '18px 38px', borderRadius: 40, background: LIME, color: INK, fontFamily: 'Poppins', fontWeight: 800, fontSize: 40, boxShadow: `0 7px 0 ${LIME_D}, 0 0 40px rgba(151,209,49,0.45)`}}>7 días gratis · sin tarjeta</div></div>);
-    if (w2.on) out.push(<div key="E2" style={{position: 'absolute', left: 0, width: 1080, top: 1385, display: 'flex', justifyContent: 'center', opacity: w2.o, transform: `scale(${0.7 + 0.3 * pop(w2.l)})`}}><div style={{padding: '10px 30px', borderRadius: 30, background: 'rgba(26,32,41,0.82)', border: `2px solid ${LIME}`, color: TXT, fontFamily: 'Poppins', fontWeight: 700, fontSize: 36}}>Pago <span style={{color: LIME}}>único</span></div></div>);
+    if (w2.on) out.push(<div key="E2" style={{position: 'absolute', left: 0, width: 1080, top: 1380, display: 'flex', justifyContent: 'center', opacity: w2.o, transform: `scale(${0.7 + 0.3 * pop(w2.l)})`}}><div style={{padding: '12px 32px', borderRadius: 32, background: 'rgba(26,32,41,0.86)', border: `2px solid ${LIME}`, color: TXT, fontFamily: 'Poppins', fontWeight: 700, fontSize: 34}}>Pago <span style={{color: LIME}}>único</span> · tú eliges el tiempo</div></div>);
   }
   return <>{out}</>;
+};
+
+/* ---------------- Tracking brackets on the phone ---------------- */
+const Brackets = () => {
+  const f = useCurrentFrame();
+  if (f < 312 || f >= 482) return null;
+  const c = camera(f); const P = phoneC(f); if (!P) return null;
+  const [cx, cy] = proj(c, P[0], P[1]);
+  const o = clamp((f - 312) / 8) * clamp((482 - f) / 10);
+  const hw = c.s * 205 * (1 + 0.02 * Math.sin(f / 4)), hh = c.s * 385 * (1 + 0.02 * Math.sin(f / 4)), L = 56;
+  const pts: [number, number, number, number][] = [[-1, -1, 1, 1], [1, -1, -1, 1], [1, 1, -1, -1], [-1, 1, 1, -1]];
+  return (
+    <svg width={1080} height={1920} style={{position: 'absolute', inset: 0, opacity: o * 0.9}}>
+      {pts.map(([sx, sy, dx, dy], i) => { const x = cx + sx * hw, y = cy + sy * hh; return <polyline key={i} points={`${x + dx * L},${y} ${x},${y} ${x},${y + dy * L}`} fill="none" stroke={LIME} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />; })}
+    </svg>
+  );
+};
+
+/* ---------------- Button -> phone morph ---------------- */
+const Morph = () => {
+  const f = useCurrentFrame();
+  if (f < 792 || f > 805) return null;
+  const b = btnPos(); const p = ease(clamp((f - 792) / 14));
+  const lerp = (a: number, c: number) => a + (c - a) * p;
+  const col = `rgb(${Math.round(lerp(151, 13))},${Math.round(lerp(209, 16))},${Math.round(lerp(49, 21))})`;
+  return <div style={{position: 'absolute', left: lerp(b.left, 227), top: lerp(b.top, 410), width: lerp(400, 626), height: lerp(92, 1273), borderRadius: lerp(28, 84), background: col, boxShadow: `0 0 ${lerp(40, 60)}px rgba(151,209,49,0.45)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Poppins', fontWeight: 700, fontSize: 34, color: INK, overflow: 'hidden'}}><span style={{opacity: 1 - p * 3 > 0 ? 1 - p * 3 : 0}}>✓ Serie 1 registrada</span></div>;
 };
 
 /* ---------------- Calendar insert ---------------- */
 const CalendarInsert = () => {
   const f = useCurrentFrame();
   if (f < CUTS.calendar || f >= CUTS.wipes[3] + 4) return null;
-  const l = f - CUTS.calendar, k = 0.72 + 0.28 * ease(clamp(l / 12));
+  const l = f - CUTS.calendar, k = 0.97 + 0.03 * ease(clamp(l / 8));
   return (
     <AbsoluteFill>
       <div style={{position: 'absolute', left: 140, top: 520, width: 800, height: 1100, borderRadius: 400, background: 'radial-gradient(ellipse, rgba(151,209,49,0.32), rgba(151,209,49,0) 68%)'}} />
@@ -195,10 +245,13 @@ const EndCard = () => {
     <AbsoluteFill style={{background: `radial-gradient(ellipse at 50% 30%, rgba(151,209,49,0.22), rgba(18,22,28,0) 60%), ${INK}`, fontFamily: 'Poppins', alignItems: 'center'}}>
       <div style={{position: 'absolute', top: 470, left: 0, width: 1080, display: 'flex', justifyContent: 'center', transform: `scale(${0.6 + 0.4 * pop(l - 6, 10, 170)})`, filter: 'drop-shadow(0 0 40px rgba(151,209,49,0.5))'}}><Mark size={210} /></div>
       <div style={{position: 'absolute', top: 740, left: 0, width: 1080, textAlign: 'center', fontWeight: 800, fontSize: 112, color: TXT, opacity: clamp((l - 10) / 6), transform: `translateY(${(1 - ease(clamp((l - 10) / 10))) * 30}px)`}}>Gym<span style={{color: LIME}}>Evo</span>App</div>
-      <div style={{position: 'absolute', top: 1000, left: 0, width: 1080, display: 'flex', justifyContent: 'center', opacity: clamp((l - 20) / 6), transform: `scale(${0.8 + 0.2 * pop(l - 20)})`}}><div style={{padding: '20px 44px', borderRadius: 44, background: LIME, color: INK, fontWeight: 800, fontSize: 46, boxShadow: `0 8px 0 ${LIME_D}, 0 0 44px rgba(151,209,49,0.45)`}}>7 días gratis · sin tarjeta</div></div>
-      <div style={{position: 'absolute', top: 1130, left: 0, width: 1080, textAlign: 'center', color: GRAY, fontWeight: 600, fontSize: 40, opacity: clamp((l - 30) / 6)}}>Pago único</div>
-      <div style={{position: 'absolute', top: 1260, left: 0, width: 1080, textAlign: 'center', color: LIME, fontWeight: 800, fontSize: 60, opacity: clamp((l - 36) / 6)}}>gymevoapp.com</div>
-      <div style={{position: 'absolute', top: 1350, left: 0, width: 1080, textAlign: 'center', color: GRAY, fontWeight: 600, fontSize: 38, opacity: clamp((l - 42) / 6)}}>@GymEvoApp</div>
+      <div style={{position: 'absolute', top: 900, left: 0, width: 1080, display: 'flex', justifyContent: 'center', opacity: clamp((l - 20) / 6), transform: `scale(${0.8 + 0.2 * pop(l - 20)})`}}><div style={{padding: '20px 44px', borderRadius: 44, background: LIME, color: INK, fontWeight: 800, fontSize: 46, boxShadow: `0 8px 0 ${LIME_D}, 0 0 44px rgba(151,209,49,0.45)`}}>7 días gratis · sin tarjeta</div></div>
+      <div style={{position: 'absolute', top: 1040, left: 70, width: 940, padding: '26px 20px', borderRadius: 28, background: 'rgba(26,32,41,0.8)', border: `2px solid ${LIME}`, textAlign: 'center', opacity: clamp((l - 30) / 6), transform: `translateY(${(1 - ease(clamp((l - 30) / 10))) * 40}px)`, boxShadow: '0 0 34px rgba(151,209,49,0.2)'}}>
+        <div style={{color: TXT, fontWeight: 800, fontSize: 64, lineHeight: 1.1}}>Pago <span style={{color: LIME}}>único</span></div>
+        <div style={{color: GRAY, fontWeight: 600, fontSize: 38, marginTop: 8}}>Tú eliges por cuánto tiempo</div>
+      </div>
+      <div style={{position: 'absolute', top: 1290, left: 0, width: 1080, textAlign: 'center', color: LIME, fontWeight: 800, fontSize: 62, clipPath: `polygon(0 0, ${clamp((l - 40) / 12) * 125}% 0, ${clamp((l - 40) / 12) * 125 - 22}% 100%, 0 100%)`}}>gymevoapp.com</div>
+      <div style={{position: 'absolute', top: 1385, left: 0, width: 1080, textAlign: 'center', color: GRAY, fontWeight: 600, fontSize: 38, opacity: clamp((l - 46) / 6)}}>@GymEvoApp</div>
     </AbsoluteFill>
   );
 };
@@ -207,17 +260,19 @@ const EndCard = () => {
 export const Overlay = () => {
   useFonts();
   const f = useCurrentFrame();
-  const s = f < 340 ? 1 : f < 348 ? interpolate(f, [340, 348], [1, 1.28], {easing: Easing.in(Easing.cubic)}) : f < 358 ? interpolate(f, [348, 358], [1.28, 1], {easing: Easing.out(Easing.cubic)}) : 1;
+  const c = camera(f);
   return (
     <AbsoluteFill style={{background: '#0d1015'}}>
-      <AbsoluteFill style={{transform: `scale(${s})`, transformOrigin: '540px 1000px'}}><OffthreadVideo src={staticFile('gymevo/base_depth.mp4')} muted /></AbsoluteFill>
+      <AbsoluteFill style={{transform: `translate(${c.tx}px, ${c.ty}px) scale(${c.s})`, transformOrigin: '0 0'}}><OffthreadVideo src={staticFile('gymevo/base_depth.mp4')} muted /></AbsoluteFill>
       <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(13,16,21,0) 52%, rgba(13,16,21,0.38) 70%, rgba(13,16,21,0) 88%)'}} />
+      <Brackets />
       <CalendarInsert />
       <HudRow />
+      <Morph />
       <Subtitles />
       <LogoCorner />
       <EndCard />
-      {CUTS.wipes.map((c) => <Wipe key={c} c={c} />)}
+      {CUTS.wipes.map((x) => <Wipe key={x} c={x} />)}
       <IrisO />
       <LimeIris c={CUTS.logo} cx={540} cy={960} id="ml" />
       <LimeIris c={CUTS.end} cx={540} cy={960} id="me" />
