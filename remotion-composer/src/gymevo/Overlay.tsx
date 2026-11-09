@@ -24,7 +24,7 @@ const camera = (f: number) => {
 };
 type Cam = ReturnType<typeof camera>;
 const proj = (c: Cam, x: number, y: number) => [c.s * x + c.tx, c.s * y + c.ty];
-const btnPos = () => { const an = anchorAt(790) || [200, 500, 800, 1500]; return {left: clamp(an[2] - 150, 540, 700), top: clamp(an[1] + 330, 520, 980)}; };
+const btnPos = () => { const an = anchorAt(735) || [200, 500, 800, 1500]; return {left: clamp(an[2] - 150, 540, 700), top: clamp(an[1] + 330, 520, 980)}; };
 
 /* ---------------- Subtitles ---------------- */
 const Subtitles = () => {
@@ -114,7 +114,7 @@ const HudRow = () => {
   }
   /* B: C09 guide card */
   {
-    const w = win(f, 626, 696);
+    const w = win(f, 622, 690);
     if (w.on) {
       out.push(<Glass key="B" left={80} top={360} w={430} o={w.o} sc={0.88 + 0.12 * ease(clamp(w.l / 10))}>
         <div style={{fontSize: 22, color: GRAY, letterSpacing: 3, fontWeight: 600}}>GUÍA</div>
@@ -129,13 +129,13 @@ const HudRow = () => {
   }
   /* C: C09 registrar button */
   {
-    const w = win(f, 712, 793);
+    const w = win(f, 694, 741);
     if (w.on) {
       const {left, top} = btnPos();
-      const press = f >= 756 && f < 760 ? 0.94 : 1, done = f >= 760;
-      const rl = f - 756;
+      const press = f >= 722 && f < 726 ? 0.94 : 1, done = f >= 726;
+      const rl = f - 722;
       out.push(<React.Fragment key="C">
-        <div style={{position: 'absolute', left, top, opacity: f > 790 ? 1 : w.o, transform: `scale(${(0.8 + 0.2 * ease(clamp(w.l / 10))) * press})`, transformOrigin: 'left top', padding: '20px 30px', borderRadius: 26, background: LIME, color: INK, fontFamily: 'Poppins', fontWeight: 700, fontSize: 36, boxShadow: `0 8px 0 ${LIME_D}, 0 0 40px rgba(151,209,49,0.5)`}}>{done ? '✓ Serie 1 registrada' : 'Registrar serie 1'}</div>
+        <div style={{position: 'absolute', left, top, opacity: f > 735 ? 1 : w.o, transform: `scale(${(0.8 + 0.2 * ease(clamp(w.l / 10))) * press})`, transformOrigin: 'left top', padding: '20px 30px', borderRadius: 26, background: LIME, color: INK, fontFamily: 'Poppins', fontWeight: 700, fontSize: 36, boxShadow: `0 8px 0 ${LIME_D}, 0 0 40px rgba(151,209,49,0.5)`}}>{done ? '✓ Serie 1 registrada' : 'Registrar serie 1'}</div>
         {rl >= 0 && rl < 16 ? <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}><circle cx={left + 140} cy={top + 40} r={20 + rl * 14} fill="none" stroke={LIME} strokeWidth={5} opacity={1 - rl / 16} /></svg> : null}
       </React.Fragment>);
     }
@@ -154,8 +154,8 @@ const HudRow = () => {
   }
   /* E: C10 pills */
   {
-    const fg = wordFrame('v13', 0, 3), fp = wordFrame('v13', 3, 2);
-    const w1 = win(f, fg, CUTS.end - 6), w2 = win(f, fp, CUTS.end - 6);
+    const fg = wordFrame('v13a', 0, 3);
+    const w1 = win(f, fg, CUTS.end - 6);
     if (w1.on) out.push(<div key="E1" style={{position: 'absolute', left: 0, width: 1080, top: 1475, display: 'flex', justifyContent: 'center', opacity: w1.o, transform: `translateY(${(1 - ease(clamp(w1.l / 9))) * 40}px)`}}><div style={{padding: '18px 38px', borderRadius: 40, background: LIME, color: INK, fontFamily: 'Poppins', fontWeight: 800, fontSize: 40, boxShadow: `0 7px 0 ${LIME_D}, 0 0 40px rgba(151,209,49,0.45)`}}>7 días gratis · sin tarjeta</div></div>);
   }
   return <>{out}</>;
@@ -180,8 +180,8 @@ const Brackets = () => {
 /* ---------------- Button -> phone morph ---------------- */
 const Morph = () => {
   const f = useCurrentFrame();
-  if (f < 792 || f > 805) return null;
-  const b = btnPos(); const p = ease(clamp((f - 792) / 14));
+  if (f < 740 || f > 753) return null;
+  const b = btnPos(); const p = ease(clamp((f - 740) / 14));
   const lerp = (a: number, c: number) => a + (c - a) * p;
   const col = `rgb(${Math.round(lerp(151, 13))},${Math.round(lerp(209, 16))},${Math.round(lerp(49, 21))})`;
   return <div style={{position: 'absolute', left: lerp(b.left, 227), top: lerp(b.top, 410), width: lerp(400, 626), height: lerp(92, 1273), borderRadius: lerp(28, 84), background: col, boxShadow: `0 0 ${lerp(40, 60)}px rgba(151,209,49,0.45)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Poppins', fontWeight: 700, fontSize: 34, color: INK, overflow: 'hidden'}}><span style={{opacity: 1 - p * 3 > 0 ? 1 - p * 3 : 0}}>✓ Serie 1 registrada</span></div>;

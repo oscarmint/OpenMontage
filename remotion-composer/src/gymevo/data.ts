@@ -1,7 +1,7 @@
 import wtRaw from './wordtimes.json';
 const WT = wtRaw as Record<string, number[]>;
 export const FPS = 24;
-export const N = 1073;
+export const N = 1087;
 export const sec = (t: number) => Math.round(t * FPS);
 export const LIME = '#97d131';
 export const LIME_D = '#5a7d16';
@@ -42,17 +42,18 @@ export const PHRASES: Phrase[] = [
   build('v5', 12.3, 14.42, [['Y', 'entra', 'a'], ['*GymEvoApp*']]),
   build('v7a', 14.6, 19.9, [['GymEvoApp', 'usa', '*IA*'], ['para', 'ayudarte', 'a', 'armar', 'tu', 'rutina,'], ['según', 'tu', '*nivel*', 'y', 'tu', '*meta*']]),
   build('v7b', 20.2, 25.4, [['para', 'que', 'entrenes', 'con', '*rumbo*,'], ['con', 'la', '*técnica*', 'de', 'cada'], ['movimiento', 'a', 'la', 'vista,'], ['*serie*', 'tras', '*serie*']]),
-  build('m1', 25.8, 28.8, [['Cada', 'movimiento'], ['con', 'su', '*guía*'], ['paso', 'a', 'paso']]),
-  build('m2', 29.0, 36.0, [['*Registra*', 'cada', '*serie*'], ['con', 'su', 'peso'], ['y', 'mira', 'tu', '*progreso*'], ['en', 'el', 'calendario.'], ['Así', 'siempre', 'sabes'], ['qué', 'sigue.']]),
-  build('v13', 36.2, 41.53, [['*Pruébala*', '7', 'días', '*gratis*,'], ['sin', 'registrar', 'tu', 'tarjeta,'], ['y', 'si', 'te', 'gusta,'], ['es', 'un', '*pago*', '*único*']]),
+  build('m1', 25.8, 28.68, [['Cada', 'movimiento'], ['con', 'su', '*guía*'], ['paso', 'a', 'paso']]),
+  build('m2', 28.85, 32.87, [['*Registra*', 'cada', '*serie*'], ['con', 'su', 'peso'], ['y', 'mira', 'tu', '*progreso*'], ['en', 'el', 'calendario.']]),
+  build('v13a', 33.2, 36.23, [['*Pruébala*', '7', 'días', '*gratis*,'], ['sin', 'registrar', 'tu', 'tarjeta.']]),
+  build('v13b', 36.57, 40.65, [['Si', 'te', 'gusta,'], ['eliges', 'el', '*tiempo*', 'que', 'quieras'], ['usarla', 'y', 'haces', 'un', '*solo*', '*pago*']]),
 ];
 export const IMPACT_FRAMES: number[] = PHRASES.flatMap((p) => p.chunks.flatMap((c) => c.words.filter((w) => w.imp).map((w) => w.f)));
 export const wordFrame = (pid: string, ci: number, wi: number) => PHRASES.find((p) => p.id === pid)!.chunks[ci].words[wi].f;
 
-export const CUTS = {wipes: [46, 154, 228, 866], irisO: 91, logo: 293, punch: 348, calendar: 806, end: 1006};
+export const CUTS = {wipes: [46, 154, 228, 796], irisO: 91, logo: 293, punch: 348, calendar: 754, end: 984};
 export const DEPTH = [
   {word: 'EVO', f0: 7, f1: 94, size: 340, y: 330, kind: 'wipe'},
   {word: 'TÉCNICA', f0: 158, f1: 228, size: 190, y: 300, kind: 'glitch'},
   {word: 'RUMBO', f0: 490, f1: 612, size: 225, y: 390, kind: 'wipe'},
-  {word: 'REGISTRAR', f0: 696, f1: 806, size: 150, y: 500, kind: 'wipe'},
+  {word: 'REGISTRAR', f0: 696, f1: 754, size: 150, y: 500, kind: 'wipe'},
 ];
