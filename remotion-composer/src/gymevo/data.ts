@@ -51,8 +51,8 @@ export const wordFrame = (pid: string, ci: number, wi: number) => PHRASES.find((
 
 export const CUTS = {wipes: [46, 154, 228, 866], irisO: 91, logo: 293, punch: 348, calendar: 806, end: 1006};
 export const DEPTH = [
-  {word: 'EVO', f0: 7, f1: 94, size: 430, y: 640, kind: 'wipe'},
-  {word: 'TÉCNICA', f0: 158, f1: 228, size: 200, y: 640, kind: 'glitch'},
-  {word: 'RUMBO', f0: 490, f1: 612, size: 285, y: 720, kind: 'wipe'},
-  {word: 'REGISTRAR', f0: 696, f1: 806, size: 160, y: 680, kind: 'wipe'},
+  {word: 'EVO', f0: 7, f1: 94, size: 340, y: 330, kind: 'wipe'},
+  {word: 'TÉCNICA', f0: 158, f1: 228, size: 190, y: 300, kind: 'glitch'},
+  {word: 'RUMBO', f0: 490, f1: 612, size: 225, y: 390, kind: 'wipe'},
+  {word: 'REGISTRAR', f0: 696, f1: 806, size: 150, y: 500, kind: 'wipe'},
 ];

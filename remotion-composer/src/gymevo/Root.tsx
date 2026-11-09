@@ -6,5 +6,6 @@ export const Root = () => (
   <>
     <Composition id="Overlay" component={Overlay} durationInFrames={N} fps={FPS} width={1080} height={1920} />
     <Composition id="DepthText" component={DepthText} durationInFrames={N} fps={FPS} width={1080} height={1920} />
+    <Composition id="DepthGhost" component={DepthText} durationInFrames={N} fps={FPS} width={1080} height={1920} defaultProps={{ghost: true}} />
   </>
 );

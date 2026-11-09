@@ -13,12 +13,12 @@ const pop = (l: number, damping = 10, stiffness = 190) => spring({frame: Math.ma
 
 /* ---------------- Camera ---------------- */
 const camData = camRaw as Record<string, number[]>;
-const phoneC = (f: number): number[] | null => { let sx = 0, sy = 0, n = 0; for (let d = -3; d <= 3; d++) { const a = camData[String(f + d)]; if (a) { sx += a[0]; sy += a[1]; n++; } } return n ? [sx / n, sy / n] : null; };
+const phoneC = (f: number): number[] | null => { let sx = 0, sy = 0, n = 0; for (let d = -10; d <= 10; d++) { const a = camData[String(f + d)]; if (a) { sx += a[0]; sy += a[1]; n++; } } return n ? [sx / n, sy / n] : null; };
 const pulseAt = (f: number) => { let p = 0; for (const wf of IMPACT_FRAMES) { if (f >= wf && f < wf + 10) p = Math.max(p, Math.exp(-(f - wf) / 3.5)); } return p; };
 const camera = (f: number) => {
-  const s0 = f >= 293 && f < 490 ? interpolate(f, [296, 330, 456, 488], [1, 1.55, 1.55, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)}) : 1;
-  const w = (s0 - 1) / 0.55; const P = phoneC(f) || [540, 960];
-  const s = s0 * (1 + 0.018 * pulseAt(f));
+  const s0 = f >= 293 && f < 490 ? interpolate(f, [296, 330, 456, 488], [1, 1.4, 1.4, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)}) : 1;
+  const w = (s0 - 1) / 0.4; const P = phoneC(f) || [540, 960];
+  const s = s0;
   const Sx = P[0] + (540 - P[0]) * w, Sy = P[1] + (880 - P[1]) * w;
   return {s, tx: Sx - s * P[0], ty: Sy - s * P[1], w};
 };
@@ -100,7 +100,7 @@ const HudRow = () => {
     const w = win(f, 502, 600);
     if (w.on) {
       const an = anchorAt(f) || [120, 520, 620, 1500];
-      const left = clamp(an[2] + 20, 560, 690), top = clamp(an[1] + 70, 330, 900), s = 0.86 + 0.14 * ease(clamp(w.l / 10));
+      const left = clamp(an[2] + 20, 560, 690), top = clamp(an[1] + 150, 540, 900), s = 0.86 + 0.14 * ease(clamp(w.l / 10));
       out.push(<React.Fragment key="A">
         <Leader x1={left} y1={top + 40} x2={clamp(an[2] - 30, 300, 700)} y2={top + 140} o={w.o} f={f} />
         <Glass left={left} top={top} w={340} o={w.o} sc={s}>
@@ -157,7 +157,6 @@ const HudRow = () => {
     const fg = wordFrame('v13', 0, 3), fp = wordFrame('v13', 3, 2);
     const w1 = win(f, fg, CUTS.end - 6), w2 = win(f, fp, CUTS.end - 6);
     if (w1.on) out.push(<div key="E1" style={{position: 'absolute', left: 0, width: 1080, top: 1475, display: 'flex', justifyContent: 'center', opacity: w1.o, transform: `translateY(${(1 - ease(clamp(w1.l / 9))) * 40}px)`}}><div style={{padding: '18px 38px', borderRadius: 40, background: LIME, color: INK, fontFamily: 'Poppins', fontWeight: 800, fontSize: 40, boxShadow: `0 7px 0 ${LIME_D}, 0 0 40px rgba(151,209,49,0.45)`}}>7 días gratis · sin tarjeta</div></div>);
-    if (w2.on) out.push(<div key="E2" style={{position: 'absolute', left: 0, width: 1080, top: 1380, display: 'flex', justifyContent: 'center', opacity: w2.o, transform: `scale(${0.7 + 0.3 * pop(w2.l)})`}}><div style={{padding: '12px 32px', borderRadius: 32, background: 'rgba(26,32,41,0.86)', border: `2px solid ${LIME}`, color: TXT, fontFamily: 'Poppins', fontWeight: 700, fontSize: 34}}>Pago <span style={{color: LIME}}>único</span> · tú eliges el tiempo</div></div>);
   }
   return <>{out}</>;
 };
