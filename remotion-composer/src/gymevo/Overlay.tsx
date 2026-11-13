@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Easing, OffthreadVideo, interpolate, spring, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, spring, staticFile, useCurrentFrame} from 'remotion';
 import {CUTS, FPS, GRAY, IMPACT_FRAMES, INK, LIME, LIME_D, PHRASES, TXT, wordFrame} from './data';
 import {useFonts} from './Fonts';
 import anchorsRaw from './anchors.json';
@@ -72,7 +72,7 @@ const LogoCorner = () => {
   if (f < a) return null;
   const k = ease(clamp((f - a) / 14));
   const cx = interpolate(k, [0, 1], [540, 955]), cy = interpolate(k, [0, 1], [960, 250]), s = interpolate(k, [0, 1], [1.05, 0.52]);
-  return <div style={{position: 'absolute', left: cx - 75, top: cy - 75, width: 150, height: 150, transform: `scale(${s})`, opacity: f > a + 14 ? 0.92 : 1, filter: 'drop-shadow(0 0 18px rgba(151,209,49,0.55))'}}><Mark size={150} /></div>;
+  return <div style={{position: 'absolute', left: cx - 130, top: cy - 54, width: 260, transform: `scale(${s})`, opacity: f > a + 14 ? 0.95 : 1, filter: 'drop-shadow(0 0 16px rgba(151,209,49,0.45))'}}><Img src={staticFile('gymevo/logo_mark.png')} style={{width: 260, display: 'block'}} /></div>;
 };
 
 /* ---------------- Glass HUD ---------------- */
@@ -232,7 +232,7 @@ const LimeIris = ({c, cx, cy, id}: {c: number; cx: number; cy: number; id: strin
 const LogoPop = () => {
   const f = useCurrentFrame(); const c = CUTS.logo;
   if (f < c || f > c + 12) return null;
-  return <div style={{position: 'absolute', left: 540 - 75, top: 960 - 75, width: 150, height: 150, transform: `scale(${0.5 + 0.55 * pop(f - c, 9, 200)})`}}><Mark size={150} /></div>;
+  return <div style={{position: 'absolute', left: 540 - 320, top: 960 - 133, width: 640, transform: `scale(${0.5 + 0.55 * pop(f - c, 9, 200)})`}}><Img src={staticFile('gymevo/logo_mark.png')} style={{width: 640, display: 'block'}} /></div>;
 };
 
 /* ---------------- End card ---------------- */
@@ -242,8 +242,7 @@ const EndCard = () => {
   const l = f - CUTS.end;
   return (
     <AbsoluteFill style={{background: `radial-gradient(ellipse at 50% 30%, rgba(151,209,49,0.22), rgba(18,22,28,0) 60%), ${INK}`, fontFamily: 'Poppins', alignItems: 'center'}}>
-      <div style={{position: 'absolute', top: 470, left: 0, width: 1080, display: 'flex', justifyContent: 'center', transform: `scale(${0.6 + 0.4 * pop(l - 6, 10, 170)})`, filter: 'drop-shadow(0 0 40px rgba(151,209,49,0.5))'}}><Mark size={210} /></div>
-      <div style={{position: 'absolute', top: 740, left: 0, width: 1080, textAlign: 'center', fontWeight: 800, fontSize: 112, color: TXT, opacity: clamp((l - 10) / 6), transform: `translateY(${(1 - ease(clamp((l - 10) / 10))) * 30}px)`}}>Gym<span style={{color: LIME}}>Evo</span>App</div>
+      <div style={{position: 'absolute', top: 250, left: 0, width: 1080, display: 'flex', justifyContent: 'center', transform: `scale(${0.7 + 0.3 * pop(l - 6, 10, 170)})`, opacity: clamp((l - 4) / 6), filter: 'drop-shadow(0 0 40px rgba(151,209,49,0.35))'}}><Img src={staticFile('gymevo/logo_full.png')} style={{width: 780, display: 'block'}} /></div>
       <div style={{position: 'absolute', top: 900, left: 0, width: 1080, display: 'flex', justifyContent: 'center', opacity: clamp((l - 20) / 6), transform: `scale(${0.8 + 0.2 * pop(l - 20)})`}}><div style={{padding: '20px 44px', borderRadius: 44, background: LIME, color: INK, fontWeight: 800, fontSize: 46, boxShadow: `0 8px 0 ${LIME_D}, 0 0 44px rgba(151,209,49,0.45)`}}>7 días gratis · sin tarjeta</div></div>
       <div style={{position: 'absolute', top: 1040, left: 70, width: 940, padding: '26px 20px', borderRadius: 28, background: 'rgba(26,32,41,0.8)', border: `2px solid ${LIME}`, textAlign: 'center', opacity: clamp((l - 30) / 6), transform: `translateY(${(1 - ease(clamp((l - 30) / 10))) * 40}px)`, boxShadow: '0 0 34px rgba(151,209,49,0.2)'}}>
         <div style={{color: TXT, fontWeight: 800, fontSize: 64, lineHeight: 1.1}}>Pago <span style={{color: LIME}}>único</span></div>
