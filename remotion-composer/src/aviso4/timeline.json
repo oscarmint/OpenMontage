@@ -1,0 +1,1149 @@
+{
+ "fps": 24,
+ "total_s": 64.87,
+ "total_f": 1557,
+ "shots": [
+  {
+   "i": 1,
+   "voices": [
+    "V01"
+   ],
+   "t0": 0.0,
+   "t1": 3.44,
+   "f0": 0,
+   "f1": 83
+  },
+  {
+   "i": 2,
+   "voices": [
+    "V02"
+   ],
+   "t0": 3.44,
+   "t1": 6.93,
+   "f0": 83,
+   "f1": 166
+  },
+  {
+   "i": 3,
+   "voices": [
+    "V03"
+   ],
+   "t0": 6.93,
+   "t1": 9.88,
+   "f0": 166,
+   "f1": 237
+  },
+  {
+   "i": 4,
+   "voices": [
+    "V04a",
+    "V04b"
+   ],
+   "t0": 9.88,
+   "t1": 18.09,
+   "f0": 237,
+   "f1": 434
+  },
+  {
+   "i": 5,
+   "voices": [
+    "V05"
+   ],
+   "t0": 18.09,
+   "t1": 21.69,
+   "f0": 434,
+   "f1": 521
+  },
+  {
+   "i": 6,
+   "voices": [
+    "V06"
+   ],
+   "t0": 21.69,
+   "t1": 29.14,
+   "f0": 521,
+   "f1": 699
+  },
+  {
+   "i": 7,
+   "voices": [
+    "V07"
+   ],
+   "t0": 29.14,
+   "t1": 31.5,
+   "f0": 699,
+   "f1": 756
+  },
+  {
+   "i": 8,
+   "voices": [
+    "V08a",
+    "V08b"
+   ],
+   "t0": 31.5,
+   "t1": 39.64,
+   "f0": 756,
+   "f1": 951
+  },
+  {
+   "i": 9,
+   "voices": [
+    "V09a",
+    "V09b"
+   ],
+   "t0": 39.64,
+   "t1": 48.46,
+   "f0": 951,
+   "f1": 1163
+  },
+  {
+   "i": 10,
+   "voices": [
+    "V10"
+   ],
+   "t0": 48.46,
+   "t1": 54.1,
+   "f0": 1163,
+   "f1": 1298
+  },
+  {
+   "i": 11,
+   "voices": [
+    "V11"
+   ],
+   "t0": 54.1,
+   "t1": 57.72,
+   "f0": 1298,
+   "f1": 1385
+  },
+  {
+   "i": 12,
+   "voices": [
+    "V12"
+   ],
+   "t0": 57.72,
+   "t1": 64.87,
+   "f0": 1385,
+   "f1": 1557
+  }
+ ],
+ "voices": {
+  "V01": {
+   "clip": "P01",
+   "who": "A",
+   "T": 0.35,
+   "dv": 2.95,
+   "file_onset": 0.06,
+   "place": 0.29
+  },
+  "V02": {
+   "clip": "P02",
+   "who": "B",
+   "T": 3.58,
+   "dv": 3.21,
+   "file_onset": 0.14,
+   "place": 3.44
+  },
+  "V03": {
+   "clip": "P03",
+   "who": "A",
+   "T": 7.07,
+   "dv": 2.67,
+   "file_onset": 0.07,
+   "place": 7.0
+  },
+  "V04a": {
+   "clip": "P04a",
+   "who": "A",
+   "T": 10.02,
+   "dv": 5.13,
+   "file_onset": 0.06,
+   "place": 9.96
+  },
+  "V04b": {
+   "clip": "P04b",
+   "who": "B",
+   "T": 15.3,
+   "dv": 2.65,
+   "file_onset": 0.06,
+   "place": 15.24
+  },
+  "V05": {
+   "clip": "P05",
+   "who": "A",
+   "T": 18.23,
+   "dv": 3.32,
+   "file_onset": 0.06,
+   "place": 18.17
+  },
+  "V06": {
+   "clip": "P06",
+   "who": "B",
+   "T": 21.83,
+   "dv": 7.17,
+   "file_onset": 0.06,
+   "place": 21.77
+  },
+  "V07": {
+   "clip": "P07",
+   "who": "A",
+   "T": 29.28,
+   "dv": 2.08,
+   "file_onset": 0.06,
+   "place": 29.22
+  },
+  "V08a": {
+   "clip": "P08a",
+   "who": "A",
+   "T": 31.64,
+   "dv": 4.1,
+   "file_onset": 0.11,
+   "place": 31.53
+  },
+  "V08b": {
+   "clip": "P08b",
+   "who": "B",
+   "T": 35.89,
+   "dv": 3.61,
+   "file_onset": 0.06,
+   "place": 35.83
+  },
+  "V09a": {
+   "clip": "P09a",
+   "who": "A",
+   "T": 39.78,
+   "dv": 2.92,
+   "file_onset": 0.06,
+   "place": 39.72
+  },
+  "V09b": {
+   "clip": "P09b",
+   "who": "B",
+   "T": 42.85,
+   "dv": 5.47,
+   "file_onset": 0.09,
+   "place": 42.76
+  },
+  "V10": {
+   "clip": "P10",
+   "who": "B",
+   "T": 48.6,
+   "dv": 5.36,
+   "file_onset": 0.15,
+   "place": 48.45
+  },
+  "V11": {
+   "clip": "P11",
+   "who": "A",
+   "T": 54.24,
+   "dv": 3.34,
+   "file_onset": 0.09,
+   "place": 54.15
+  },
+  "V12": {
+   "clip": "P12",
+   "who": "B",
+   "T": 57.86,
+   "dv": 5.21,
+   "file_onset": 0.06,
+   "place": 57.8
+  }
+ },
+ "words": {
+  "V01": [
+   {
+    "t": "Esto",
+    "imp": false,
+    "f": 8
+   },
+   {
+    "t": "pasa",
+    "imp": false,
+    "f": 16
+   },
+   {
+    "t": "cuando",
+    "imp": false,
+    "f": 23
+   },
+   {
+    "t": "dejas",
+    "imp": false,
+    "f": 31
+   },
+   {
+    "t": "de",
+    "imp": false,
+    "f": 38
+   },
+   {
+    "t": "improvisar",
+    "imp": false,
+    "f": 42
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 57
+   },
+   {
+    "t": "sigues",
+    "imp": false,
+    "f": 62
+   },
+   {
+    "t": "un",
+    "imp": false,
+    "f": 69
+   },
+   {
+    "t": "plan.",
+    "imp": true,
+    "f": 72
+   }
+  ],
+  "V02": [
+   {
+    "t": "Semana",
+    "imp": true,
+    "f": 86
+   },
+   {
+    "t": "uno.",
+    "imp": false,
+    "f": 99
+   },
+   {
+    "t": "Deja",
+    "imp": false,
+    "f": 120
+   },
+   {
+    "t": "de",
+    "imp": false,
+    "f": 127
+   },
+   {
+    "t": "llegar",
+    "imp": false,
+    "f": 130
+   },
+   {
+    "t": "al",
+    "imp": false,
+    "f": 137
+   },
+   {
+    "t": "gimnasio",
+    "imp": false,
+    "f": 142
+   },
+   {
+    "t": "sin",
+    "imp": false,
+    "f": 152
+   },
+   {
+    "t": "plan.",
+    "imp": true,
+    "f": 156
+   }
+  ],
+  "V03": [
+   {
+    "t": "O",
+    "imp": false,
+    "f": 170
+   },
+   {
+    "t": "de",
+    "imp": false,
+    "f": 174
+   },
+   {
+    "t": "repetir",
+    "imp": false,
+    "f": 177
+   },
+   {
+    "t": "siempre",
+    "imp": false,
+    "f": 190
+   },
+   {
+    "t": "los",
+    "imp": false,
+    "f": 198
+   },
+   {
+    "t": "mismos",
+    "imp": true,
+    "f": 202
+   },
+   {
+    "t": "movimientos.",
+    "imp": false,
+    "f": 210
+   }
+  ],
+  "V04a": [
+   {
+    "t": "Yim",
+    "imp": false,
+    "f": 240
+   },
+   {
+    "t": "Evo",
+    "imp": false,
+    "f": 244
+   },
+   {
+    "t": "App",
+    "imp": false,
+    "f": 251
+   },
+   {
+    "t": "usa",
+    "imp": false,
+    "f": 255
+   },
+   {
+    "t": "IA",
+    "imp": true,
+    "f": 267
+   },
+   {
+    "t": "para",
+    "imp": false,
+    "f": 274
+   },
+   {
+    "t": "ayudarte",
+    "imp": false,
+    "f": 284
+   },
+   {
+    "t": "a",
+    "imp": false,
+    "f": 300
+   },
+   {
+    "t": "armar",
+    "imp": false,
+    "f": 304
+   },
+   {
+    "t": "tu",
+    "imp": false,
+    "f": 312
+   },
+   {
+    "t": "rutina,",
+    "imp": false,
+    "f": 315
+   },
+   {
+    "t": "según",
+    "imp": false,
+    "f": 330
+   },
+   {
+    "t": "tu",
+    "imp": false,
+    "f": 336
+   },
+   {
+    "t": "nivel",
+    "imp": true,
+    "f": 340
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 346
+   },
+   {
+    "t": "tu",
+    "imp": false,
+    "f": 350
+   },
+   {
+    "t": "meta.",
+    "imp": true,
+    "f": 353
+   }
+  ],
+  "V04b": [
+   {
+    "t": "Por",
+    "imp": false,
+    "f": 367
+   },
+   {
+    "t": "fin,",
+    "imp": false,
+    "f": 372
+   },
+   {
+    "t": "el",
+    "imp": false,
+    "f": 379
+   },
+   {
+    "t": "gimnasio",
+    "imp": false,
+    "f": 384
+   },
+   {
+    "t": "tiene",
+    "imp": false,
+    "f": 401
+   },
+   {
+    "t": "sentido.",
+    "imp": true,
+    "f": 414
+   }
+  ],
+  "V05": [
+   {
+    "t": "Semana",
+    "imp": true,
+    "f": 438
+   },
+   {
+    "t": "dos.",
+    "imp": false,
+    "f": 448
+   },
+   {
+    "t": "Trabajas",
+    "imp": false,
+    "f": 455
+   },
+   {
+    "t": "partes",
+    "imp": false,
+    "f": 477
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 488
+   },
+   {
+    "t": "siempre",
+    "imp": false,
+    "f": 493
+   },
+   {
+    "t": "ignorabas.",
+    "imp": true,
+    "f": 501
+   }
+  ],
+  "V06": [
+   {
+    "t": "Cada",
+    "imp": false,
+    "f": 524
+   },
+   {
+    "t": "movimiento",
+    "imp": false,
+    "f": 530
+   },
+   {
+    "t": "tiene",
+    "imp": false,
+    "f": 543
+   },
+   {
+    "t": "su",
+    "imp": false,
+    "f": 549
+   },
+   {
+    "t": "guía",
+    "imp": true,
+    "f": 552
+   },
+   {
+    "t": "paso",
+    "imp": false,
+    "f": 555
+   },
+   {
+    "t": "a",
+    "imp": false,
+    "f": 561
+   },
+   {
+    "t": "paso.",
+    "imp": false,
+    "f": 568
+   },
+   {
+    "t": "Así",
+    "imp": false,
+    "f": 578
+   },
+   {
+    "t": "aprendes",
+    "imp": false,
+    "f": 597
+   },
+   {
+    "t": "la",
+    "imp": false,
+    "f": 606
+   },
+   {
+    "t": "técnica",
+    "imp": false,
+    "f": 609
+   },
+   {
+    "t": "correcta,",
+    "imp": true,
+    "f": 619
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 631
+   },
+   {
+    "t": "dejas",
+    "imp": false,
+    "f": 636
+   },
+   {
+    "t": "de",
+    "imp": false,
+    "f": 648
+   },
+   {
+    "t": "usar",
+    "imp": false,
+    "f": 652
+   },
+   {
+    "t": "toda",
+    "imp": false,
+    "f": 658
+   },
+   {
+    "t": "la",
+    "imp": false,
+    "f": 668
+   },
+   {
+    "t": "espalda",
+    "imp": false,
+    "f": 671
+   },
+   {
+    "t": "en",
+    "imp": false,
+    "f": 683
+   },
+   {
+    "t": "el",
+    "imp": false,
+    "f": 686
+   },
+   {
+    "t": "curl.",
+    "imp": false,
+    "f": 690
+   }
+  ],
+  "V07": [
+   {
+    "t": "Semana",
+    "imp": true,
+    "f": 703
+   },
+   {
+    "t": "tres.",
+    "imp": false,
+    "f": 716
+   },
+   {
+    "t": "Sigues",
+    "imp": false,
+    "f": 734
+   },
+   {
+    "t": "la",
+    "imp": false,
+    "f": 742
+   },
+   {
+    "t": "guía.",
+    "imp": true,
+    "f": 746
+   }
+  ],
+  "V08a": [
+   {
+    "t": "Registras",
+    "imp": false,
+    "f": 759
+   },
+   {
+    "t": "tu",
+    "imp": false,
+    "f": 771
+   },
+   {
+    "t": "peso",
+    "imp": true,
+    "f": 777
+   },
+   {
+    "t": "en",
+    "imp": false,
+    "f": 784
+   },
+   {
+    "t": "cada",
+    "imp": false,
+    "f": 790
+   },
+   {
+    "t": "sesión",
+    "imp": false,
+    "f": 797
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 804
+   },
+   {
+    "t": "entras",
+    "imp": false,
+    "f": 810
+   },
+   {
+    "t": "al",
+    "imp": false,
+    "f": 818
+   },
+   {
+    "t": "gimnasio",
+    "imp": false,
+    "f": 822
+   },
+   {
+    "t": "con",
+    "imp": false,
+    "f": 833
+   },
+   {
+    "t": "una",
+    "imp": false,
+    "f": 839
+   },
+   {
+    "t": "misión.",
+    "imp": true,
+    "f": 848
+   }
+  ],
+  "V08b": [
+   {
+    "t": "Ya",
+    "imp": false,
+    "f": 861
+   },
+   {
+    "t": "no",
+    "imp": false,
+    "f": 865
+   },
+   {
+    "t": "improvisas,",
+    "imp": true,
+    "f": 868
+   },
+   {
+    "t": "ya",
+    "imp": false,
+    "f": 895
+   },
+   {
+    "t": "no",
+    "imp": false,
+    "f": 899
+   },
+   {
+    "t": "miras",
+    "imp": false,
+    "f": 902
+   },
+   {
+    "t": "las",
+    "imp": false,
+    "f": 909
+   },
+   {
+    "t": "máquinas",
+    "imp": false,
+    "f": 913
+   },
+   {
+    "t": "sin",
+    "imp": false,
+    "f": 923
+   },
+   {
+    "t": "saber",
+    "imp": false,
+    "f": 927
+   },
+   {
+    "t": "qué",
+    "imp": false,
+    "f": 934
+   },
+   {
+    "t": "toca.",
+    "imp": false,
+    "f": 939
+   }
+  ],
+  "V09a": [
+   {
+    "t": "Semana",
+    "imp": true,
+    "f": 955
+   },
+   {
+    "t": "cuatro:",
+    "imp": false,
+    "f": 964
+   },
+   {
+    "t": "ves",
+    "imp": false,
+    "f": 973
+   },
+   {
+    "t": "tu",
+    "imp": false,
+    "f": 989
+   },
+   {
+    "t": "progreso",
+    "imp": true,
+    "f": 992
+   },
+   {
+    "t": "en",
+    "imp": false,
+    "f": 1002
+   },
+   {
+    "t": "el",
+    "imp": false,
+    "f": 1005
+   },
+   {
+    "t": "calendario.",
+    "imp": false,
+    "f": 1008
+   }
+  ],
+  "V09b": [
+   {
+    "t": "Quinta",
+    "imp": false,
+    "f": 1028
+   },
+   {
+    "t": "semana:",
+    "imp": true,
+    "f": 1035
+   },
+   {
+    "t": "ya",
+    "imp": false,
+    "f": 1056
+   },
+   {
+    "t": "estás",
+    "imp": false,
+    "f": 1059
+   },
+   {
+    "t": "enfocado,",
+    "imp": true,
+    "f": 1066
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 1088
+   },
+   {
+    "t": "Yim",
+    "imp": false,
+    "f": 1091
+   },
+   {
+    "t": "Evo",
+    "imp": false,
+    "f": 1094
+   },
+   {
+    "t": "App",
+    "imp": false,
+    "f": 1101
+   },
+   {
+    "t": "te",
+    "imp": false,
+    "f": 1104
+   },
+   {
+    "t": "sugiere",
+    "imp": false,
+    "f": 1107
+   },
+   {
+    "t": "el",
+    "imp": false,
+    "f": 1119
+   },
+   {
+    "t": "peso",
+    "imp": true,
+    "f": 1122
+   },
+   {
+    "t": "para",
+    "imp": false,
+    "f": 1130
+   },
+   {
+    "t": "la",
+    "imp": false,
+    "f": 1138
+   },
+   {
+    "t": "próxima",
+    "imp": false,
+    "f": 1141
+   },
+   {
+    "t": "serie.",
+    "imp": false,
+    "f": 1152
+   }
+  ],
+  "V10": [
+   {
+    "t": "Semana",
+    "imp": false,
+    "f": 1166
+   },
+   {
+    "t": "tras",
+    "imp": false,
+    "f": 1177
+   },
+   {
+    "t": "semana,",
+    "imp": false,
+    "f": 1181
+   },
+   {
+    "t": "sin",
+    "imp": false,
+    "f": 1202
+   },
+   {
+    "t": "excusas",
+    "imp": true,
+    "f": 1205
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 1218
+   },
+   {
+    "t": "sin",
+    "imp": false,
+    "f": 1223
+   },
+   {
+    "t": "improvisar.",
+    "imp": false,
+    "f": 1226
+   },
+   {
+    "t": "Tú",
+    "imp": false,
+    "f": 1243
+   },
+   {
+    "t": "solo",
+    "imp": false,
+    "f": 1257
+   },
+   {
+    "t": "te",
+    "imp": false,
+    "f": 1264
+   },
+   {
+    "t": "enfocas",
+    "imp": true,
+    "f": 1268
+   },
+   {
+    "t": "en",
+    "imp": false,
+    "f": 1278
+   },
+   {
+    "t": "entrenar.",
+    "imp": false,
+    "f": 1282
+   }
+  ],
+  "V11": [
+   {
+    "t": "Pruébala",
+    "imp": false,
+    "f": 1302
+   },
+   {
+    "t": "hoy:",
+    "imp": false,
+    "f": 1311
+   },
+   {
+    "t": "siete",
+    "imp": false,
+    "f": 1325
+   },
+   {
+    "t": "días",
+    "imp": false,
+    "f": 1331
+   },
+   {
+    "t": "gratis,",
+    "imp": true,
+    "f": 1334
+   },
+   {
+    "t": "sin",
+    "imp": false,
+    "f": 1342
+   },
+   {
+    "t": "registrar",
+    "imp": false,
+    "f": 1349
+   },
+   {
+    "t": "tu",
+    "imp": false,
+    "f": 1364
+   },
+   {
+    "t": "tarjeta.",
+    "imp": true,
+    "f": 1369
+   }
+  ],
+  "V12": [
+   {
+    "t": "Es",
+    "imp": false,
+    "f": 1389
+   },
+   {
+    "t": "un",
+    "imp": false,
+    "f": 1392
+   },
+   {
+    "t": "pago",
+    "imp": false,
+    "f": 1396
+   },
+   {
+    "t": "único,",
+    "imp": true,
+    "f": 1403
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 1425
+   },
+   {
+    "t": "tú",
+    "imp": false,
+    "f": 1430
+   },
+   {
+    "t": "eliges",
+    "imp": false,
+    "f": 1435
+   },
+   {
+    "t": "el",
+    "imp": false,
+    "f": 1446
+   },
+   {
+    "t": "tiempo.",
+    "imp": true,
+    "f": 1450
+   },
+   {
+    "t": "Entra",
+    "imp": false,
+    "f": 1473
+   },
+   {
+    "t": "a",
+    "imp": false,
+    "f": 1480
+   },
+   {
+    "t": "Yim",
+    "imp": false,
+    "f": 1484
+   },
+   {
+    "t": "Evo",
+    "imp": false,
+    "f": 1487
+   },
+   {
+    "t": "App",
+    "imp": false,
+    "f": 1494
+   },
+   {
+    "t": "punto",
+    "imp": false,
+    "f": 1497
+   },
+   {
+    "t": "com.",
+    "imp": false,
+    "f": 1508
+   }
+  ]
+ }
+}
