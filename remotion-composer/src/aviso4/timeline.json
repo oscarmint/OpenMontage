@@ -551,57 +551,57 @@
    {
     "t": "movimiento",
     "imp": false,
-    "f": 530
+    "f": 531
    },
    {
     "t": "tiene",
     "imp": false,
-    "f": 543
+    "f": 545
    },
    {
     "t": "su",
     "imp": false,
-    "f": 549
+    "f": 553
    },
    {
     "t": "guía",
     "imp": true,
-    "f": 552
+    "f": 556
    },
    {
     "t": "paso",
     "imp": false,
-    "f": 555
+    "f": 560
    },
    {
     "t": "a",
     "imp": false,
-    "f": 561
+    "f": 568
    },
    {
     "t": "paso.",
     "imp": false,
-    "f": 568
+    "f": 572
    },
    {
     "t": "Así",
     "imp": false,
-    "f": 578
+    "f": 583
    },
    {
     "t": "aprendes",
     "imp": false,
-    "f": 597
+    "f": 594
    },
    {
     "t": "la",
     "imp": false,
-    "f": 606
+    "f": 604
    },
    {
     "t": "técnica",
     "imp": false,
-    "f": 609
+    "f": 608
    },
    {
     "t": "correcta,",
@@ -611,12 +611,12 @@
    {
     "t": "y",
     "imp": false,
-    "f": 631
+    "f": 636
    },
    {
     "t": "dejas",
     "imp": false,
-    "f": 636
+    "f": 641
    },
    {
     "t": "de",
@@ -626,32 +626,32 @@
    {
     "t": "usar",
     "imp": false,
-    "f": 652
+    "f": 651
    },
    {
     "t": "toda",
     "imp": false,
-    "f": 658
+    "f": 660
    },
    {
     "t": "la",
     "imp": false,
-    "f": 668
+    "f": 666
    },
    {
     "t": "espalda",
     "imp": false,
-    "f": 671
+    "f": 672
    },
    {
     "t": "en",
     "imp": false,
-    "f": 683
+    "f": 682
    },
    {
     "t": "el",
     "imp": false,
-    "f": 686
+    "f": 687
    },
    {
     "t": "curl.",
