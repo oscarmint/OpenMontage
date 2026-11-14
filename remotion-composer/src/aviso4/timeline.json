@@ -1,7 +1,7 @@
 {
  "fps": 24,
- "total_s": 64.87,
- "total_f": 1557,
+ "total_s": 65.367,
+ "total_f": 1569,
  "shots": [
   {
    "i": 1,
@@ -92,39 +92,39 @@
     "V09b"
    ],
    "t0": 39.64,
-   "t1": 48.46,
+   "t1": 48.957,
    "f0": 951,
-   "f1": 1163
+   "f1": 1175
   },
   {
    "i": 10,
    "voices": [
     "V10"
    ],
-   "t0": 48.46,
-   "t1": 54.1,
-   "f0": 1163,
-   "f1": 1298
+   "t0": 48.957,
+   "t1": 54.597,
+   "f0": 1175,
+   "f1": 1310
   },
   {
    "i": 11,
    "voices": [
     "V11"
    ],
-   "t0": 54.1,
-   "t1": 57.72,
-   "f0": 1298,
-   "f1": 1385
+   "t0": 54.597,
+   "t1": 58.217,
+   "f0": 1310,
+   "f1": 1397
   },
   {
    "i": 12,
    "voices": [
     "V12"
    ],
-   "t0": 57.72,
-   "t1": 64.87,
-   "f0": 1385,
-   "f1": 1557
+   "t0": 58.217,
+   "t1": 65.367,
+   "f0": 1397,
+   "f1": 1569
   }
  ],
  "voices": {
@@ -220,33 +220,33 @@
    "clip": "P09b",
    "who": "B",
    "T": 42.85,
-   "dv": 5.47,
-   "file_onset": 0.09,
-   "place": 42.76
+   "dv": 5.967,
+   "file_onset": 0.289,
+   "place": 42.561
   },
   "V10": {
    "clip": "P10",
    "who": "B",
-   "T": 48.6,
+   "T": 49.097,
    "dv": 5.36,
    "file_onset": 0.15,
-   "place": 48.45
+   "place": 48.947
   },
   "V11": {
    "clip": "P11",
    "who": "A",
-   "T": 54.24,
+   "T": 54.737,
    "dv": 3.34,
    "file_onset": 0.09,
-   "place": 54.15
+   "place": 54.647
   },
   "V12": {
    "clip": "P12",
    "who": "B",
-   "T": 57.86,
+   "T": 58.357,
    "dv": 5.21,
    "file_onset": 0.06,
-   "place": 57.8
+   "place": 58.297
   }
  },
  "words": {
@@ -861,12 +861,12 @@
    {
     "t": "Quinta",
     "imp": false,
-    "f": 1028
+    "f": 1029
    },
    {
     "t": "semana:",
     "imp": true,
-    "f": 1035
+    "f": 1034
    },
    {
     "t": "ya",
@@ -881,268 +881,268 @@
    {
     "t": "enfocado,",
     "imp": true,
-    "f": 1066
+    "f": 1067
    },
    {
     "t": "y",
     "imp": false,
-    "f": 1088
+    "f": 1093
    },
    {
     "t": "Yim",
     "imp": false,
-    "f": 1091
+    "f": 1096
    },
    {
     "t": "Evo",
     "imp": false,
-    "f": 1094
+    "f": 1099
    },
    {
     "t": "App",
     "imp": false,
-    "f": 1101
+    "f": 1108
    },
    {
     "t": "te",
     "imp": false,
-    "f": 1104
+    "f": 1111
    },
    {
     "t": "sugiere",
     "imp": false,
-    "f": 1107
+    "f": 1113
    },
    {
     "t": "el",
     "imp": false,
-    "f": 1119
+    "f": 1130
    },
    {
     "t": "peso",
     "imp": true,
-    "f": 1122
+    "f": 1133
    },
    {
     "t": "para",
     "imp": false,
-    "f": 1130
+    "f": 1141
    },
    {
     "t": "la",
     "imp": false,
-    "f": 1138
+    "f": 1148
    },
    {
     "t": "próxima",
     "imp": false,
-    "f": 1141
+    "f": 1151
    },
    {
     "t": "serie.",
     "imp": false,
-    "f": 1152
+    "f": 1162
    }
   ],
   "V10": [
    {
     "t": "Semana",
     "imp": false,
-    "f": 1166
+    "f": 1178
    },
    {
     "t": "tras",
     "imp": false,
-    "f": 1177
+    "f": 1189
    },
    {
     "t": "semana,",
     "imp": false,
-    "f": 1181
+    "f": 1193
    },
    {
     "t": "sin",
     "imp": false,
-    "f": 1202
+    "f": 1214
    },
    {
     "t": "excusas",
     "imp": true,
-    "f": 1205
+    "f": 1217
    },
    {
     "t": "y",
     "imp": false,
-    "f": 1218
+    "f": 1229
    },
    {
     "t": "sin",
     "imp": false,
-    "f": 1223
+    "f": 1235
    },
    {
     "t": "improvisar.",
     "imp": false,
-    "f": 1226
+    "f": 1238
    },
    {
     "t": "Tú",
     "imp": false,
-    "f": 1243
+    "f": 1255
    },
    {
     "t": "solo",
     "imp": false,
-    "f": 1257
+    "f": 1269
    },
    {
     "t": "te",
     "imp": false,
-    "f": 1264
+    "f": 1276
    },
    {
     "t": "enfocas",
     "imp": true,
-    "f": 1268
+    "f": 1280
    },
    {
     "t": "en",
     "imp": false,
-    "f": 1278
+    "f": 1290
    },
    {
     "t": "entrenar.",
     "imp": false,
-    "f": 1282
+    "f": 1294
    }
   ],
   "V11": [
    {
     "t": "Pruébala",
     "imp": false,
-    "f": 1302
+    "f": 1314
    },
    {
     "t": "hoy:",
     "imp": false,
-    "f": 1311
+    "f": 1323
    },
    {
     "t": "siete",
     "imp": false,
-    "f": 1325
+    "f": 1336
    },
    {
     "t": "días",
     "imp": false,
-    "f": 1331
+    "f": 1343
    },
    {
     "t": "gratis,",
     "imp": true,
-    "f": 1334
+    "f": 1346
    },
    {
     "t": "sin",
     "imp": false,
-    "f": 1342
+    "f": 1354
    },
    {
     "t": "registrar",
     "imp": false,
-    "f": 1349
+    "f": 1361
    },
    {
     "t": "tu",
     "imp": false,
-    "f": 1364
+    "f": 1376
    },
    {
     "t": "tarjeta.",
     "imp": true,
-    "f": 1369
+    "f": 1381
    }
   ],
   "V12": [
    {
     "t": "Es",
     "imp": false,
-    "f": 1389
+    "f": 1401
    },
    {
     "t": "un",
     "imp": false,
-    "f": 1392
+    "f": 1404
    },
    {
     "t": "pago",
     "imp": false,
-    "f": 1396
+    "f": 1408
    },
    {
     "t": "único,",
     "imp": true,
-    "f": 1403
+    "f": 1415
    },
    {
     "t": "y",
     "imp": false,
-    "f": 1425
+    "f": 1437
    },
    {
     "t": "tú",
     "imp": false,
-    "f": 1430
+    "f": 1442
    },
    {
     "t": "eliges",
     "imp": false,
-    "f": 1435
+    "f": 1447
    },
    {
     "t": "el",
     "imp": false,
-    "f": 1446
+    "f": 1457
    },
    {
     "t": "tiempo.",
     "imp": true,
-    "f": 1450
+    "f": 1462
    },
    {
     "t": "Entra",
     "imp": false,
-    "f": 1473
+    "f": 1485
    },
    {
     "t": "a",
     "imp": false,
-    "f": 1480
+    "f": 1492
    },
    {
     "t": "Yim",
     "imp": false,
-    "f": 1484
+    "f": 1496
    },
    {
     "t": "Evo",
     "imp": false,
-    "f": 1487
+    "f": 1499
    },
    {
     "t": "App",
     "imp": false,
-    "f": 1494
+    "f": 1506
    },
    {
     "t": "punto",
     "imp": false,
-    "f": 1497
+    "f": 1509
    },
    {
     "t": "com.",
     "imp": false,
-    "f": 1508
+    "f": 1520
    }
   ]
  }
