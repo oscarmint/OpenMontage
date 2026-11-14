@@ -173,8 +173,8 @@
    "who": "A",
    "T": 18.23,
    "dv": 3.32,
-   "file_onset": 0.06,
-   "place": 18.17
+   "file_onset": 0.506,
+   "place": 17.724
   },
   "V06": {
    "clip": "P06",
@@ -509,7 +509,7 @@
    {
     "t": "Semana",
     "imp": true,
-    "f": 438
+    "f": 437
    },
    {
     "t": "dos.",
@@ -519,27 +519,27 @@
    {
     "t": "Trabajas",
     "imp": false,
-    "f": 455
+    "f": 454
    },
    {
     "t": "partes",
     "imp": false,
-    "f": 477
+    "f": 481
    },
    {
     "t": "que",
     "imp": false,
-    "f": 488
+    "f": 492
    },
    {
     "t": "siempre",
     "imp": false,
-    "f": 493
+    "f": 497
    },
    {
     "t": "ignorabas.",
     "imp": true,
-    "f": 501
+    "f": 505
    }
   ],
   "V06": [
