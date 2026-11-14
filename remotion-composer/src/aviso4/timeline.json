@@ -181,8 +181,8 @@
    "who": "B",
    "T": 21.83,
    "dv": 7.17,
-   "file_onset": 0.06,
-   "place": 21.77
+   "file_onset": 0.412,
+   "place": 21.418
   },
   "V07": {
    "clip": "P07",
@@ -551,112 +551,112 @@
    {
     "t": "movimiento",
     "imp": false,
-    "f": 531
+    "f": 529
    },
    {
     "t": "tiene",
     "imp": false,
-    "f": 545
+    "f": 540
    },
    {
     "t": "su",
     "imp": false,
-    "f": 553
+    "f": 547
    },
    {
     "t": "guía",
     "imp": true,
-    "f": 556
+    "f": 551
    },
    {
     "t": "paso",
     "imp": false,
-    "f": 560
+    "f": 554
    },
    {
     "t": "a",
     "imp": false,
-    "f": 568
+    "f": 562
    },
    {
     "t": "paso.",
     "imp": false,
-    "f": 572
+    "f": 565
    },
    {
     "t": "Así",
     "imp": false,
-    "f": 583
+    "f": 577
    },
    {
     "t": "aprendes",
     "imp": false,
-    "f": 594
+    "f": 596
    },
    {
     "t": "la",
     "imp": false,
-    "f": 604
+    "f": 606
    },
    {
     "t": "técnica",
     "imp": false,
-    "f": 608
+    "f": 609
    },
    {
     "t": "correcta,",
     "imp": true,
-    "f": 619
+    "f": 618
    },
    {
     "t": "y",
     "imp": false,
-    "f": 636
+    "f": 632
    },
    {
     "t": "dejas",
     "imp": false,
-    "f": 641
+    "f": 642
    },
    {
     "t": "de",
     "imp": false,
-    "f": 648
+    "f": 649
    },
    {
     "t": "usar",
     "imp": false,
-    "f": 651
+    "f": 652
    },
    {
     "t": "toda",
     "imp": false,
-    "f": 660
+    "f": 657
    },
    {
     "t": "la",
     "imp": false,
-    "f": 666
+    "f": 665
    },
    {
     "t": "espalda",
     "imp": false,
-    "f": 672
+    "f": 668
    },
    {
     "t": "en",
     "imp": false,
-    "f": 682
+    "f": 679
    },
    {
     "t": "el",
     "imp": false,
-    "f": 687
+    "f": 682
    },
    {
     "t": "curl.",
     "imp": false,
-    "f": 690
+    "f": 686
    }
   ],
   "V07": [
