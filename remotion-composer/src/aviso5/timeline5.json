@@ -1,0 +1,1303 @@
+{
+ "fps": 24,
+ "total_s": 79.01,
+ "total_f": 1896,
+ "shots": [
+  {
+   "i": 1,
+   "v": "V01",
+   "who": "A",
+   "week": 0,
+   "scene": "L01",
+   "f0": 0,
+   "f1": 121
+  },
+  {
+   "i": 2,
+   "v": "V02",
+   "who": "B",
+   "week": 1,
+   "scene": "L02a",
+   "f0": 121,
+   "f1": 296
+  },
+  {
+   "i": 3,
+   "v": "V03",
+   "who": "A",
+   "week": 1,
+   "scene": "L03",
+   "f0": 296,
+   "f1": 477
+  },
+  {
+   "i": 4,
+   "v": "V04",
+   "who": "B",
+   "week": 2,
+   "scene": "L04",
+   "f0": 477,
+   "f1": 586
+  },
+  {
+   "i": 5,
+   "v": "V05",
+   "who": "A",
+   "week": 2,
+   "scene": "L05",
+   "f0": 586,
+   "f1": 713
+  },
+  {
+   "i": 6,
+   "v": "V06",
+   "who": "B",
+   "week": 2,
+   "scene": "L06",
+   "f0": 713,
+   "f1": 813
+  },
+  {
+   "i": 7,
+   "v": "V07",
+   "who": "A",
+   "week": 3,
+   "scene": "L07a",
+   "f0": 813,
+   "f1": 992
+  },
+  {
+   "i": 8,
+   "v": "V08",
+   "who": "B",
+   "week": 3,
+   "scene": "L08",
+   "f0": 992,
+   "f1": 1110
+  },
+  {
+   "i": 9,
+   "v": "V09",
+   "who": "A",
+   "week": 4,
+   "scene": "L09",
+   "f0": 1110,
+   "f1": 1282
+  },
+  {
+   "i": 10,
+   "v": "V10",
+   "who": "B",
+   "week": 5,
+   "scene": "L10",
+   "f0": 1282,
+   "f1": 1443
+  },
+  {
+   "i": 11,
+   "v": "V11",
+   "who": "A",
+   "week": 5,
+   "scene": "L11",
+   "f0": 1443,
+   "f1": 1615
+  },
+  {
+   "i": 12,
+   "v": "V12",
+   "who": "B",
+   "week": 5,
+   "scene": "L12",
+   "f0": 1615,
+   "f1": 1783
+  },
+  {
+   "i": 13,
+   "v": "V13",
+   "who": "A",
+   "week": 5,
+   "scene": "FIN",
+   "f0": 1783,
+   "f1": 1896
+  }
+ ],
+ "voices": {
+  "V01": {
+   "who": "A",
+   "T": 0.35,
+   "dv": 4.59,
+   "onset": 0.44,
+   "place": -0.09,
+   "scene": "L01"
+  },
+  "V02": {
+   "who": "B",
+   "T": 5.16,
+   "dv": 7.08,
+   "onset": 0.57,
+   "place": 4.59,
+   "scene": "L02a"
+  },
+  "V03": {
+   "who": "A",
+   "T": 12.46,
+   "dv": 7.32,
+   "onset": 0.19,
+   "place": 12.27,
+   "scene": "L03"
+  },
+  "V04": {
+   "who": "B",
+   "T": 20.0,
+   "dv": 4.32,
+   "onset": 0.56,
+   "place": 19.44,
+   "scene": "L04"
+  },
+  "V05": {
+   "who": "A",
+   "T": 24.54,
+   "dv": 5.04,
+   "onset": 0.5,
+   "place": 24.04,
+   "scene": "L05"
+  },
+  "V06": {
+   "who": "B",
+   "T": 29.8,
+   "dv": 3.97,
+   "onset": 0.72,
+   "place": 29.08,
+   "scene": "L06"
+  },
+  "V07": {
+   "who": "A",
+   "T": 33.99,
+   "dv": 7.25,
+   "onset": 0.25,
+   "place": 33.74,
+   "scene": "L07a"
+  },
+  "V08": {
+   "who": "B",
+   "T": 41.46,
+   "dv": 4.68,
+   "onset": 0.5,
+   "place": 40.96,
+   "scene": "L08"
+  },
+  "V09": {
+   "who": "A",
+   "T": 46.36,
+   "dv": 6.96,
+   "onset": 0.47,
+   "place": 45.89,
+   "scene": "L09"
+  },
+  "V10": {
+   "who": "B",
+   "T": 53.54,
+   "dv": 6.49,
+   "onset": 0.55,
+   "place": 52.99,
+   "scene": "L10"
+  },
+  "V11": {
+   "who": "A",
+   "T": 60.25,
+   "dv": 6.92,
+   "onset": 0.71,
+   "place": 59.54,
+   "scene": "L11"
+  },
+  "V12": {
+   "who": "B",
+   "T": 67.39,
+   "dv": 6.79,
+   "onset": 0.67,
+   "place": 66.72,
+   "scene": "L12"
+  },
+  "V13": {
+   "who": "A",
+   "T": 74.4,
+   "dv": 3.01,
+   "onset": 0.59,
+   "place": 73.81,
+   "scene": "FIN"
+  }
+ },
+ "words": {
+  "V01": [
+   {
+    "t": "Si",
+    "imp": false,
+    "f": 8
+   },
+   {
+    "t": "una",
+    "imp": false,
+    "f": 12
+   },
+   {
+    "t": "mujer",
+    "imp": true,
+    "f": 18
+   },
+   {
+    "t": "usara",
+    "imp": false,
+    "f": 26
+   },
+   {
+    "t": "Yim",
+    "imp": false,
+    "f": 36
+   },
+   {
+    "t": "Evo",
+    "imp": false,
+    "f": 39
+   },
+   {
+    "t": "App",
+    "imp": false,
+    "f": 45
+   },
+   {
+    "t": "semana",
+    "imp": true,
+    "f": 49
+   },
+   {
+    "t": "tras",
+    "imp": true,
+    "f": 62
+   },
+   {
+    "t": "semana,",
+    "imp": true,
+    "f": 66
+   },
+   {
+    "t": "esto",
+    "imp": false,
+    "f": 78
+   },
+   {
+    "t": "es",
+    "imp": false,
+    "f": 94
+   },
+   {
+    "t": "lo",
+    "imp": false,
+    "f": 99
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 102
+   },
+   {
+    "t": "pasaría.",
+    "imp": true,
+    "f": 106
+   }
+  ],
+  "V02": [
+   {
+    "t": "Semana",
+    "imp": true,
+    "f": 124
+   },
+   {
+    "t": "uno.",
+    "imp": true,
+    "f": 133
+   },
+   {
+    "t": "Ella",
+    "imp": false,
+    "f": 151
+   },
+   {
+    "t": "deja",
+    "imp": false,
+    "f": 157
+   },
+   {
+    "t": "las",
+    "imp": false,
+    "f": 163
+   },
+   {
+    "t": "rutinas",
+    "imp": false,
+    "f": 167
+   },
+   {
+    "t": "de",
+    "imp": false,
+    "f": 177
+   },
+   {
+    "t": "redes,",
+    "imp": false,
+    "f": 180
+   },
+   {
+    "t": "el",
+    "imp": false,
+    "f": 196
+   },
+   {
+    "t": "cardio",
+    "imp": false,
+    "f": 201
+   },
+   {
+    "t": "sin",
+    "imp": false,
+    "f": 209
+   },
+   {
+    "t": "plan",
+    "imp": false,
+    "f": 211
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 216
+   },
+   {
+    "t": "las",
+    "imp": false,
+    "f": 219
+   },
+   {
+    "t": "caminatas",
+    "imp": false,
+    "f": 225
+   },
+   {
+    "t": "sin",
+    "imp": false,
+    "f": 240
+   },
+   {
+    "t": "rumbo,",
+    "imp": false,
+    "f": 245
+   },
+   {
+    "t": "pensando",
+    "imp": false,
+    "f": 253
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 271
+   },
+   {
+    "t": "eso",
+    "imp": false,
+    "f": 275
+   },
+   {
+    "t": "cuenta.",
+    "imp": false,
+    "f": 283
+   }
+  ],
+  "V03": [
+   {
+    "t": "Yim",
+    "imp": false,
+    "f": 299
+   },
+   {
+    "t": "Evo",
+    "imp": false,
+    "f": 302
+   },
+   {
+    "t": "App",
+    "imp": false,
+    "f": 312
+   },
+   {
+    "t": "le",
+    "imp": false,
+    "f": 315
+   },
+   {
+    "t": "crea",
+    "imp": false,
+    "f": 319
+   },
+   {
+    "t": "un",
+    "imp": false,
+    "f": 335
+   },
+   {
+    "t": "plan",
+    "imp": true,
+    "f": 340
+   },
+   {
+    "t": "real,",
+    "imp": true,
+    "f": 343
+   },
+   {
+    "t": "basado",
+    "imp": false,
+    "f": 350
+   },
+   {
+    "t": "en",
+    "imp": false,
+    "f": 361
+   },
+   {
+    "t": "sus",
+    "imp": false,
+    "f": 376
+   },
+   {
+    "t": "objetivos,",
+    "imp": false,
+    "f": 379
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 398
+   },
+   {
+    "t": "finalmente",
+    "imp": false,
+    "f": 404
+   },
+   {
+    "t": "todo",
+    "imp": false,
+    "f": 439
+   },
+   {
+    "t": "tiene",
+    "imp": false,
+    "f": 452
+   },
+   {
+    "t": "sentido.",
+    "imp": true,
+    "f": 461
+   }
+  ],
+  "V04": [
+   {
+    "t": "Semana",
+    "imp": true,
+    "f": 480
+   },
+   {
+    "t": "dos.",
+    "imp": true,
+    "f": 488
+   },
+   {
+    "t": "Está",
+    "imp": false,
+    "f": 492
+   },
+   {
+    "t": "dolorida",
+    "imp": false,
+    "f": 516
+   },
+   {
+    "t": "en",
+    "imp": false,
+    "f": 526
+   },
+   {
+    "t": "músculos",
+    "imp": false,
+    "f": 528
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 539
+   },
+   {
+    "t": "ni",
+    "imp": false,
+    "f": 541
+   },
+   {
+    "t": "siquiera",
+    "imp": false,
+    "f": 546
+   },
+   {
+    "t": "sabía",
+    "imp": false,
+    "f": 558
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 564
+   },
+   {
+    "t": "existían.",
+    "imp": false,
+    "f": 568
+   }
+  ],
+  "V05": [
+   {
+    "t": "No",
+    "imp": false,
+    "f": 589
+   },
+   {
+    "t": "es",
+    "imp": false,
+    "f": 592
+   },
+   {
+    "t": "un",
+    "imp": false,
+    "f": 596
+   },
+   {
+    "t": "dolor",
+    "imp": false,
+    "f": 599
+   },
+   {
+    "t": "de",
+    "imp": false,
+    "f": 606
+   },
+   {
+    "t": "lesión.",
+    "imp": false,
+    "f": 609
+   },
+   {
+    "t": "Es",
+    "imp": false,
+    "f": 618
+   },
+   {
+    "t": "un",
+    "imp": false,
+    "f": 638
+   },
+   {
+    "t": "dolor",
+    "imp": false,
+    "f": 641
+   },
+   {
+    "t": "de:",
+    "imp": false,
+    "f": 648
+   },
+   {
+    "t": "mi",
+    "imp": false,
+    "f": 654
+   },
+   {
+    "t": "cuerpo",
+    "imp": false,
+    "f": 657
+   },
+   {
+    "t": "realmente",
+    "imp": false,
+    "f": 673
+   },
+   {
+    "t": "está",
+    "imp": false,
+    "f": 684
+   },
+   {
+    "t": "trabajando.",
+    "imp": true,
+    "f": 692
+   }
+  ],
+  "V06": [
+   {
+    "t": "Yim",
+    "imp": false,
+    "f": 715
+   },
+   {
+    "t": "Evo",
+    "imp": false,
+    "f": 718
+   },
+   {
+    "t": "App",
+    "imp": false,
+    "f": 726
+   },
+   {
+    "t": "lo",
+    "imp": false,
+    "f": 729
+   },
+   {
+    "t": "ajusta",
+    "imp": true,
+    "f": 732
+   },
+   {
+    "t": "todo",
+    "imp": false,
+    "f": 748
+   },
+   {
+    "t": "para",
+    "imp": false,
+    "f": 758
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 766
+   },
+   {
+    "t": "ella",
+    "imp": false,
+    "f": 771
+   },
+   {
+    "t": "continúe",
+    "imp": false,
+    "f": 779
+   },
+   {
+    "t": "sin",
+    "imp": false,
+    "f": 791
+   },
+   {
+    "t": "agotarse.",
+    "imp": false,
+    "f": 794
+   }
+  ],
+  "V07": [
+   {
+    "t": "Semana",
+    "imp": true,
+    "f": 816
+   },
+   {
+    "t": "tres.",
+    "imp": true,
+    "f": 824
+   },
+   {
+    "t": "Su",
+    "imp": false,
+    "f": 830
+   },
+   {
+    "t": "seguridad",
+    "imp": true,
+    "f": 833
+   },
+   {
+    "t": "se",
+    "imp": false,
+    "f": 856
+   },
+   {
+    "t": "siente",
+    "imp": false,
+    "f": 858
+   },
+   {
+    "t": "distinta.",
+    "imp": false,
+    "f": 865
+   },
+   {
+    "t": "Está",
+    "imp": false,
+    "f": 878
+   },
+   {
+    "t": "levantando",
+    "imp": false,
+    "f": 896
+   },
+   {
+    "t": "más",
+    "imp": false,
+    "f": 910
+   },
+   {
+    "t": "peso,",
+    "imp": false,
+    "f": 913
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 923
+   },
+   {
+    "t": "entra",
+    "imp": false,
+    "f": 925
+   },
+   {
+    "t": "al",
+    "imp": false,
+    "f": 940
+   },
+   {
+    "t": "gimnasio",
+    "imp": false,
+    "f": 943
+   },
+   {
+    "t": "como",
+    "imp": false,
+    "f": 953
+   },
+   {
+    "t": "si",
+    "imp": false,
+    "f": 961
+   },
+   {
+    "t": "fuera",
+    "imp": false,
+    "f": 964
+   },
+   {
+    "t": "la",
+    "imp": false,
+    "f": 971
+   },
+   {
+    "t": "dueña",
+    "imp": false,
+    "f": 974
+   },
+   {
+    "t": "del",
+    "imp": false,
+    "f": 979
+   },
+   {
+    "t": "lugar.",
+    "imp": false,
+    "f": 982
+   }
+  ],
+  "V08": [
+   {
+    "t": "No",
+    "imp": false,
+    "f": 995
+   },
+   {
+    "t": "solo",
+    "imp": false,
+    "f": 998
+   },
+   {
+    "t": "está",
+    "imp": false,
+    "f": 1005
+   },
+   {
+    "t": "entrenando.",
+    "imp": false,
+    "f": 1014
+   },
+   {
+    "t": "Está",
+    "imp": false,
+    "f": 1044
+   },
+   {
+    "t": "construyendo",
+    "imp": false,
+    "f": 1054
+   },
+   {
+    "t": "el",
+    "imp": false,
+    "f": 1068
+   },
+   {
+    "t": "hábito",
+    "imp": true,
+    "f": 1071
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 1083
+   },
+   {
+    "t": "realmente",
+    "imp": false,
+    "f": 1086
+   },
+   {
+    "t": "quiere.",
+    "imp": false,
+    "f": 1096
+   }
+  ],
+  "V09": [
+   {
+    "t": "Semana",
+    "imp": true,
+    "f": 1113
+   },
+   {
+    "t": "cuatro.",
+    "imp": true,
+    "f": 1121
+   },
+   {
+    "t": "Se",
+    "imp": false,
+    "f": 1131
+   },
+   {
+    "t": "nota",
+    "imp": false,
+    "f": 1146
+   },
+   {
+    "t": "en",
+    "imp": false,
+    "f": 1151
+   },
+   {
+    "t": "su",
+    "imp": false,
+    "f": 1155
+   },
+   {
+    "t": "actitud,",
+    "imp": false,
+    "f": 1157
+   },
+   {
+    "t": "antes",
+    "imp": false,
+    "f": 1181
+   },
+   {
+    "t": "de",
+    "imp": false,
+    "f": 1187
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 1191
+   },
+   {
+    "t": "diga",
+    "imp": false,
+    "f": 1194
+   },
+   {
+    "t": "una",
+    "imp": false,
+    "f": 1200
+   },
+   {
+    "t": "palabra.",
+    "imp": false,
+    "f": 1206
+   },
+   {
+    "t": "Su",
+    "imp": false,
+    "f": 1231
+   },
+   {
+    "t": "energía",
+    "imp": false,
+    "f": 1234
+   },
+   {
+    "t": "es",
+    "imp": false,
+    "f": 1244
+   },
+   {
+    "t": "otra.",
+    "imp": false,
+    "f": 1247
+   },
+   {
+    "t": "Lo",
+    "imp": false,
+    "f": 1270
+   },
+   {
+    "t": "logró.",
+    "imp": true,
+    "f": 1273
+   }
+  ],
+  "V10": [
+   {
+    "t": "Quinta",
+    "imp": true,
+    "f": 1285
+   },
+   {
+    "t": "semana.",
+    "imp": true,
+    "f": 1292
+   },
+   {
+    "t": "Ha",
+    "imp": false,
+    "f": 1317
+   },
+   {
+    "t": "construido",
+    "imp": false,
+    "f": 1320
+   },
+   {
+    "t": "una",
+    "imp": false,
+    "f": 1331
+   },
+   {
+    "t": "rutina",
+    "imp": false,
+    "f": 1338
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 1350
+   },
+   {
+    "t": "realmente",
+    "imp": false,
+    "f": 1354
+   },
+   {
+    "t": "le",
+    "imp": false,
+    "f": 1364
+   },
+   {
+    "t": "entusiasma,",
+    "imp": false,
+    "f": 1367
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 1383
+   },
+   {
+    "t": "su",
+    "imp": false,
+    "f": 1408
+   },
+   {
+    "t": "progreso",
+    "imp": false,
+    "f": 1413
+   },
+   {
+    "t": "es",
+    "imp": false,
+    "f": 1422
+   },
+   {
+    "t": "innegable.",
+    "imp": true,
+    "f": 1425
+   }
+  ],
+  "V11": [
+   {
+    "t": "La",
+    "imp": false,
+    "f": 1446
+   },
+   {
+    "t": "I",
+    "imp": false,
+    "f": 1449
+   },
+   {
+    "t": "A",
+    "imp": false,
+    "f": 1452
+   },
+   {
+    "t": "logró",
+    "imp": false,
+    "f": 1456
+   },
+   {
+    "t": "lo",
+    "imp": false,
+    "f": 1463
+   },
+   {
+    "t": "que",
+    "imp": false,
+    "f": 1466
+   },
+   {
+    "t": "años",
+    "imp": false,
+    "f": 1470
+   },
+   {
+    "t": "de",
+    "imp": false,
+    "f": 1477
+   },
+   {
+    "t": "improvisar",
+    "imp": false,
+    "f": 1481
+   },
+   {
+    "t": "nunca",
+    "imp": false,
+    "f": 1495
+   },
+   {
+    "t": "pudieron.",
+    "imp": false,
+    "f": 1502
+   },
+   {
+    "t": "Entrena",
+    "imp": false,
+    "f": 1533
+   },
+   {
+    "t": "con",
+    "imp": false,
+    "f": 1546
+   },
+   {
+    "t": "Yim",
+    "imp": false,
+    "f": 1549
+   },
+   {
+    "t": "Evo",
+    "imp": false,
+    "f": 1552
+   },
+   {
+    "t": "App,",
+    "imp": false,
+    "f": 1560
+   },
+   {
+    "t": "con",
+    "imp": false,
+    "f": 1578
+   },
+   {
+    "t": "guía",
+    "imp": false,
+    "f": 1581
+   },
+   {
+    "t": "en",
+    "imp": false,
+    "f": 1584
+   },
+   {
+    "t": "cada",
+    "imp": false,
+    "f": 1588
+   },
+   {
+    "t": "movimiento.",
+    "imp": false,
+    "f": 1596
+   }
+  ],
+  "V12": [
+   {
+    "t": "Pruébala",
+    "imp": false,
+    "f": 1617
+   },
+   {
+    "t": "gratis",
+    "imp": true,
+    "f": 1626
+   },
+   {
+    "t": "por",
+    "imp": false,
+    "f": 1633
+   },
+   {
+    "t": "siete",
+    "imp": false,
+    "f": 1639
+   },
+   {
+    "t": "días,",
+    "imp": false,
+    "f": 1646
+   },
+   {
+    "t": "sin",
+    "imp": false,
+    "f": 1650
+   },
+   {
+    "t": "tarjeta.",
+    "imp": false,
+    "f": 1664
+   },
+   {
+    "t": "Deja",
+    "imp": false,
+    "f": 1687
+   },
+   {
+    "t": "de",
+    "imp": false,
+    "f": 1694
+   },
+   {
+    "t": "adivinar",
+    "imp": false,
+    "f": 1697
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 1709
+   },
+   {
+    "t": "arranca",
+    "imp": false,
+    "f": 1712
+   },
+   {
+    "t": "con",
+    "imp": false,
+    "f": 1722
+   },
+   {
+    "t": "un",
+    "imp": false,
+    "f": 1725
+   },
+   {
+    "t": "plan.",
+    "imp": false,
+    "f": 1729
+   },
+   {
+    "t": "Descarga",
+    "imp": false,
+    "f": 1750
+   },
+   {
+    "t": "Yim",
+    "imp": false,
+    "f": 1762
+   },
+   {
+    "t": "Evo",
+    "imp": false,
+    "f": 1765
+   },
+   {
+    "t": "App",
+    "imp": false,
+    "f": 1770
+   },
+   {
+    "t": "hoy.",
+    "imp": false,
+    "f": 1773
+   }
+  ],
+  "V13": [
+   {
+    "t": "Es",
+    "imp": false,
+    "f": 1786
+   },
+   {
+    "t": "un",
+    "imp": false,
+    "f": 1789
+   },
+   {
+    "t": "pago",
+    "imp": true,
+    "f": 1792
+   },
+   {
+    "t": "único,",
+    "imp": true,
+    "f": 1799
+   },
+   {
+    "t": "y",
+    "imp": false,
+    "f": 1826
+   },
+   {
+    "t": "tú",
+    "imp": false,
+    "f": 1832
+   },
+   {
+    "t": "eliges",
+    "imp": false,
+    "f": 1835
+   },
+   {
+    "t": "el",
+    "imp": false,
+    "f": 1844
+   },
+   {
+    "t": "tiempo.",
+    "imp": false,
+    "f": 1847
+   }
+  ]
+ }
+}
