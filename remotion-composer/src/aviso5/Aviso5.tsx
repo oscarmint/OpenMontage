@@ -132,7 +132,7 @@ const Captions = () => {
   if (!c) return null;
   const l = f - c.f0;
   return (
-    <div style={{position: 'absolute', left: 50, right: 50, top: 930, height: 260, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignContent: 'center', gap: '8px 16px', transform: `scale(${0.94 + 0.06 * pop(l, 14, 240)})`, opacity: clamp(l / 3 + 0.4)}}>
+    <div style={{position: 'absolute', left: 50, right: 50, top: 930, height: 260, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignContent: 'center', gap: '8px 26px', transform: `scale(${0.94 + 0.06 * pop(l, 14, 240)})`, opacity: clamp(l / 3 + 0.4)}}>
       {c.words.map((w, i) => {
         if (f < w.f - 1) return null;
         const nxt = c.words[i + 1];
