@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Easing, Img, interpolate, spring, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Easing, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame} from 'remotion';
 import {useFonts} from '../gymevo/Fonts';
 import tlRaw from './timeline5.json';
 
@@ -19,14 +19,43 @@ const DESC: Record<string, string> = {
   L10: 'Lia · press de hombro', L11: 'Lia · pulgar arriba', L12: 'Lia · telefono (Plan de hoy)',
 };
 
-/* ------------ fondo de escena (placeholder hasta recibir el clip de Flow) ------------ */
+/* ------------ escena: clip de Flow (si ya llego) o placeholder ------------ */
+// clip por escena y segundo de inicio dentro del clip
+const HAVE: Record<string, {src: string; ss: number}> = {
+  L01: {src: 'aviso5/scenes/L01.mp4', ss: 2.8},
+  L02a: {src: 'aviso5/scenes/L02a_v1.mp4', ss: 0.3},
+  L03: {src: 'aviso5/scenes/L03.mp4', ss: 0.2},
+  L04: {src: 'aviso5/scenes/L04.mp4', ss: 0.3},
+  L05: {src: 'aviso5/scenes/L05.mp4', ss: 0.3},
+  L06: {src: 'aviso5/scenes/L06.mp4', ss: 0.5},
+};
+const L02B = {src: 'aviso5/scenes/L02b.mp4', ss: 1.0};
+const cardioF = (tl.words['V02'].find((x: any) => x.t.toLowerCase().startsWith('cardio')) || {f: SH[1].f0 + 90}).f - 6;
 const Scene = ({s}: {s: any}) => {
   const f = useCurrentFrame();
   const l = f - s.f0;
-  const drift = interpolate(l, [0, s.f1 - s.f0], [1.04, 1.1]);
+  const drift = interpolate(l, [0, s.f1 - s.f0], [1.0, 1.05]);
+  const h = HAVE[s.scene];
+  if (h) {
+    return (
+      <AbsoluteFill style={{background: INK, overflow: 'hidden'}}>
+        <AbsoluteFill style={{transform: `scale(${drift})`}}>
+          <Sequence from={s.f0} durationInFrames={s.f1 - s.f0}>
+            <OffthreadVideo src={staticFile(h.src)} startFrom={Math.round(h.ss * FPS)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+          </Sequence>
+          {s.scene === 'L02a' && (
+            <Sequence from={cardioF} durationInFrames={s.f1 - cardioF}>
+              <OffthreadVideo src={staticFile(L02B.src)} startFrom={Math.round(L02B.ss * FPS)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+            </Sequence>
+          )}
+        </AbsoluteFill>
+      </AbsoluteFill>
+    );
+  }
+  const d2 = interpolate(l, [0, s.f1 - s.f0], [1.04, 1.1]);
   return (
     <AbsoluteFill style={{background: 'linear-gradient(165deg,#222c3d 0%,#161c27 55%,#10141b 100%)', overflow: 'hidden'}}>
-      <AbsoluteFill style={{transform: `scale(${drift})`, opacity: 0.5, backgroundImage: 'linear-gradient(#ffffff10 2px,transparent 2px),linear-gradient(90deg,#ffffff10 2px,transparent 2px)', backgroundSize: '90px 90px'}} />
+      <AbsoluteFill style={{transform: `scale(${d2})`, opacity: 0.5, backgroundImage: 'linear-gradient(#ffffff10 2px,transparent 2px),linear-gradient(90deg,#ffffff10 2px,transparent 2px)', backgroundSize: '90px 90px'}} />
       <div style={{position: 'absolute', left: 0, right: 0, top: 640, textAlign: 'center', fontFamily: 'Poppins', color: '#ffffff35'}}>
         <div style={{fontSize: 150, fontWeight: 800, letterSpacing: 6}}>{s.scene}</div>
         <div style={{fontSize: 40, fontWeight: 600}}>{DESC[s.scene] || ''}</div>
@@ -41,18 +70,19 @@ const WEEK_START: Record<number, number> = {};
 SH.forEach((s) => { if (s.week > 0 && WEEK_START[s.week] === undefined) WEEK_START[s.week] = s.f0; });
 const Rail = () => {
   const f = useCurrentFrame();
-  const xs = [0, 1, 2, 3, 4].map((i) => 150 + i * 195);
+  const GAP = 112, X0 = 560;
+  const xs = [0, 1, 2, 3, 4].map((i) => X0 + i * GAP);
   const cur = [1, 2, 3, 4, 5].filter((w) => WEEK_START[w] !== undefined && f >= WEEK_START[w]).length;
   const o = clamp(f / 10);
   return (
-    <div style={{position: 'absolute', left: 0, top: 285, width: 1080, height: 90, opacity: o}}>
-      <div style={{position: 'absolute', left: 150, top: 40, width: 780, height: 8, borderRadius: 4, background: '#ffffff25'}} />
-      <div style={{position: 'absolute', left: 150, top: 40, width: Math.max(0, (cur - 1) * 195), height: 8, borderRadius: 4, background: LIME}} />
+    <div style={{position: 'absolute', left: 0, top: 1228, width: 1080, height: 70, opacity: o}}>
+      <div style={{position: 'absolute', left: X0, top: 31, width: GAP * 4, height: 7, borderRadius: 4, background: '#ffffff30'}} />
+      <div style={{position: 'absolute', left: X0, top: 31, width: Math.max(0, (cur - 1) * GAP), height: 7, borderRadius: 4, background: LIME}} />
       {xs.map((x, i) => {
         const w = i + 1; const done = cur >= w; const st = WEEK_START[w];
         const sc = st !== undefined && f >= st ? 1 + 0.35 * Math.max(0, 1 - (f - st) / 14) : 1;
         return (
-          <div key={i} style={{position: 'absolute', left: x - 32, top: 12, width: 64, height: 64, borderRadius: 32, transform: `scale(${sc})`, background: done ? LIME : INK, border: `4px solid ${done ? LIME : '#ffffff40'}`, color: done ? INK : GRAY, fontFamily: 'Poppins', fontWeight: 800, fontSize: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: done ? '0 0 26px #97d13160' : 'none'}}>
+          <div key={i} style={{position: 'absolute', left: x - 24, top: 10, width: 48, height: 48, borderRadius: 24, transform: `scale(${sc})`, background: done ? LIME : INK, border: `4px solid ${done ? LIME : '#ffffff55'}`, color: done ? INK : '#c8cfd9', fontFamily: 'Poppins', fontWeight: 800, fontSize: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: done ? '0 0 22px #97d13170' : '0 4px 14px #0008'}}>
             {w}
           </div>
         );
@@ -64,17 +94,12 @@ const Rail = () => {
 /* ------------ narrador en circulo ------------ */
 const Narrator = ({s}: {s: any}) => {
   const f = useCurrentFrame();
-  const v = tl.voices[s.v]; const l = f - s.f0;
-  const t0 = Math.round(v.T * FPS), t1 = Math.round((v.T + v.dv) * FPS);
-  const speaking = f >= t0 && f <= t1;
-  const y = (1 - pop(l, 13, 200)) * 160;
-  const bob = speaking ? Math.sin((f - t0) / 3) * 4 : 0;
-  // hueco del narrador (abajo a la izquierda, como en el anuncio ganador): aqui va el recorte limpio del presentador
+  const l = f - s.f0;
+  const y = (1 - pop(l, 13, 200)) * 200;
+  const pad = String(f).padStart(5, '0');
   return (
-    <div style={{position: 'absolute', left: 0, top: 1292, width: 470, height: 628, transform: `translateY(${y + bob}px)`}}>
-      <div style={{position: 'absolute', inset: 0, borderRadius: '40px 40px 0 0', background: 'linear-gradient(180deg,#2c3647aa,#141922cc)', border: `4px solid ${speaking ? LIME : '#ffffff30'}`, borderBottom: 'none', boxShadow: speaking ? '0 0 40px #97d13170' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Poppins', fontWeight: 800, fontSize: 150, color: '#ffffff40'}}>
-        {s.who}
-      </div>
+    <div style={{position: 'absolute', left: 0, top: 1292, width: 470, height: 628, transform: `translateY(${y}px)`}}>
+      <Img src={staticFile(`aviso5/pip/${pad}.png`)} style={{width: 470, height: 628}} />
     </div>
   );
 };
