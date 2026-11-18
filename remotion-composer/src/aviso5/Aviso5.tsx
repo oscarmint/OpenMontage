@@ -2,10 +2,14 @@ import React from 'react';
 import {AbsoluteFill, Easing, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame} from 'remotion';
 import {useFonts} from '../gymevo/Fonts';
 import tlRaw from './timeline5.json';
+import matteRaw from './mattes.json';
 
-/* AVISO 5 - look propio: carril de semanas arriba, subtitulos en MAYUSCULAS con marcador lima,
-   narrador en circulo, golpe de camara en cada corte, cierre con telefono. */
+/* AVISO 5 - capa grafica:
+   texto gigante DETRAS de Lia (mascara por fotograma), subtitulos con revelado de mascara, carril de semanas con
+   cartel que "vuela" al punto de la semana (movimiento encadenado), camara que sigue el telefono / la app,
+   transicion con el logo como mascara y HUD anclado al cuerpo. Todo sincronizado con las palabras de la voz. */
 const tl: any = tlRaw;
+const MT: Record<string, {top: number; cx: number; bot: number; l: number; r: number}[]> = matteRaw as any;
 const FPS = 24;
 const LIME = '#97d131', INK = '#12161c', TXT = '#f2f4f0', GRAY = '#7b8493';
 const ease = Easing.bezier(0.16, 1, 0.3, 1);
@@ -13,74 +17,186 @@ const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const pop = (l: number, d = 11, s = 200) => spring({frame: Math.max(0, l), fps: FPS, config: {damping: d, stiffness: s, mass: 0.7}});
 const SH: any[] = tl.shots;
 const shotAt = (f: number) => SH.find((s) => f >= s.f0 && f < s.f1) || SH[SH.length - 1];
-const DESC: Record<string, string> = {
-  L01: 'Lia · press de banca', L02a: 'Lia · rutinas copiadas', L03: 'Lia · mira el telefono', L04: 'Lia · sorpresa',
-  L05: 'Lia · dolor bueno', L06: 'Lia · ajusta y sigue', L07a: 'Lia · sentadilla', L08: 'Lia · cocina', L09: 'Lia · actitud',
-  L10: 'Lia · press de hombro', L11: 'Lia · pulgar arriba', L12: 'Lia · telefono (Plan de hoy)',
-};
+const norm = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zñ]/g, '');
+const wfind = (v: string, p: string): number => { const w = tl.words[v].find((x: any) => norm(x.t).startsWith(p)); return w ? w.f : SH[0].f0; };
+const DESC: Record<string, string> = {L08: 'Lia · cocina'};
 
-/* ------------ escena: clip de Flow (si ya llego) o placeholder ------------ */
-// clip por escena y segundo de inicio dentro del clip
-const HAVE: Record<string, {src: string; ss: number}> = {
+/* ------------ configuracion de escenas ------------ */
+type Cfg = {
+  src: string; ss: number; rate?: number; matte?: string;
+  behind?: {text: string; v: string; w: string};
+  follow?: {x: number; y: number; z: number; v: string; w: string};
+  hud?: boolean;
+};
+const HAVE: Record<string, Cfg> = {
   L01: {src: 'aviso5/scenes/L01.mp4', ss: 2.8},
   L02a: {src: 'aviso5/scenes/L02a_v1.mp4', ss: 0.3},
-  L03: {src: 'aviso5/scenes/L03.mp4', ss: 0.2},
+  L03: {src: 'aviso5/scenes/L03.mp4', ss: 0.2, follow: {x: 540, y: 1150, z: 1.22, v: 'V03', w: 'plan'}},
   L04: {src: 'aviso5/scenes/L04.mp4', ss: 0.3},
   L05: {src: 'aviso5/scenes/L05.mp4', ss: 0.3},
   L06: {src: 'aviso5/scenes/L06.mp4', ss: 0.5},
+  L07a: {src: 'aviso5/scenes/L07b.mp4', ss: 0, rate: 0.8, matte: 'L07b', behind: {text: 'FUERZA', v: 'V07', w: 'levant'}},
+  L09: {src: 'aviso5/scenes/L09.mp4', ss: 0.3, matte: 'L09', behind: {text: 'EVO', v: 'V09', w: 'energ'}},
+  L10: {src: 'aviso5/scenes/L10.mp4', ss: 0.3, matte: 'L10', behind: {text: 'RUTINA', v: 'V10', w: 'rutina'}, hud: true},
+  L11: {src: 'aviso5/scenes/L11.mp4', ss: 0.3, matte: 'L11', behind: {text: 'IA', v: 'V11', w: 'i'}},
+  L12: {src: 'aviso5/scenes/L12.mp4', ss: 0.5, follow: {x: 270, y: 548, z: 1.85, v: 'V12', w: 'gratis'}},
 };
 const L02B = {src: 'aviso5/scenes/L02b.mp4', ss: 1.0};
-const cardioF = (tl.words['V02'].find((x: any) => x.t.toLowerCase().startsWith('cardio')) || {f: SH[1].f0 + 90}).f - 6;
-const Scene = ({s}: {s: any}) => {
-  const f = useCurrentFrame();
-  const l = f - s.f0;
-  const drift = interpolate(l, [0, s.f1 - s.f0], [1.0, 1.05]);
-  const h = HAVE[s.scene];
-  if (h) {
+const cardioF = (tl.words['V02'].find((x: any) => norm(x.t).startsWith('cardio')) || {f: SH[1].f0 + 90}).f - 6;
+
+/* ------------ video de escena ------------ */
+const Vid = ({cfg, s, shift = 0}: {cfg: Cfg; s: any; shift?: number}) => {
+  const rate = cfg.rate || 1;
+  return (
+    <Sequence from={s.f0 - shift} durationInFrames={s.f1 - s.f0 + shift}>
+      <OffthreadVideo src={staticFile(cfg.src)} startFrom={Math.max(0, Math.round(cfg.ss * FPS) - Math.round(shift * rate))} playbackRate={rate} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+    </Sequence>
+  );
+};
+const clipIdx = (cfg: Cfg, s: any, f: number) => Math.round(cfg.ss * FPS + (f - s.f0) * (cfg.rate || 1));
+
+/* texto gigante que queda DETRAS de la persona */
+const BehindText = ({cfg, f}: {cfg: Cfg; f: number}) => {
+  const b = cfg.behind!; const t0 = wfind(b.v, b.w) - 2; const l = f - t0;
+  if (l < 0) return null;
+  const rev = ease(clamp(l / 12));
+  const len = b.text.length;
+  const fs = Math.min(560, Math.floor(1000 / (0.7 * len)));
+  const sc = 1 + Math.min(l, 80) * 0.0016;
+  return (
+    <div style={{position: 'absolute', left: 0, right: 0, top: 620 - fs * 0.35, textAlign: 'center', fontFamily: 'Poppins', fontWeight: 800, fontSize: fs, lineHeight: 1, color: LIME, letterSpacing: 4, opacity: 0.96, transform: `scale(${sc})`, clipPath: `inset(0 ${(1 - rev) * 100}% 0 0)`, textShadow: '0 0 60px #97d13170, 0 20px 60px #0009'}}>
+      {b.text}
+    </div>
+  );
+};
+
+/* HUD anclado al cuerpo (repeticiones) usando la mascara */
+const REPS: Record<string, number[]> = {};
+Object.keys(MT).forEach((k) => {
+  const a = MT[k].map((x) => x.top); const lo = Math.min(...a), hi = Math.max(...a);
+  const thr = lo + 0.28 * (hi - lo); const ev: number[] = []; let inside = false; let best = 0;
+  a.forEach((v, i) => { if (v < thr) { if (!inside) { inside = true; best = i; } if (v < a[best]) best = i; } else if (inside) { ev.push(best); inside = false; } });
+  if (inside) ev.push(best);
+  REPS[k] = ev;
+});
+const Hud = ({cfg, s, f}: {cfg: Cfg; s: any; f: number}) => {
+  const idx = Math.min(clipIdx(cfg, s, f), MT[cfg.matte!].length - 1);
+  const m = MT[cfg.matte!][idx];
+  const reps = REPS[cfg.matte!] || [];
+  const n = reps.filter((r) => r <= idx).length;
+  if (n === 0 || f - s.f0 < 6) return null;
+  const x = clamp(m.cx, 200, 880), y = clamp(m.top - 120, 330, 800);
+  return (
+    <div style={{position: 'absolute', left: x - 150, top: y, width: 300, fontFamily: 'Poppins', fontWeight: 800}}>
+      <div style={{display: 'flex', alignItems: 'center', gap: 12, background: '#12161ce6', border: `3px solid ${LIME}`, borderRadius: 18, padding: '10px 18px', boxShadow: '0 0 30px #97d13160', color: TXT, fontSize: 34}}>
+        <span style={{color: LIME, fontSize: 38}}>▲</span>
+        <span>REP {String(n).padStart(2, '0')}</span>
+        <span style={{marginLeft: 'auto', color: LIME}}>✓</span>
+      </div>
+      <div style={{width: 3, height: 34, background: LIME, margin: '0 auto', opacity: 0.9}} />
+      <div style={{width: 16, height: 16, borderRadius: 8, background: LIME, margin: '0 auto', boxShadow: '0 0 18px #97d131'}} />
+    </div>
+  );
+};
+
+/* tarjeta holografica de la app que sale del telefono */
+const AppCard = ({f, t0, tOut, from, to, label}: {f: number; t0: number; tOut: number; from: {x: number; y: number}; to: {x: number; y: number; w: number; h: number}; label?: string}) => {
+  const l = f - t0;
+  if (l < 0 || f > tOut + 14) return null;
+  const pin = ease(clamp(l / 16)); const pout = ease(clamp((f - tOut) / 14));
+  const p = pin * (1 - pout);
+  const sc = 0.1 + 0.9 * p; const x = from.x + (to.x - from.x) * pin; const y = from.y + (to.y - from.y) * pin;
+  const flo = Math.sin(l / 12) * 8;
+  const scan = clamp((l - 10) / 26);
+  return (
+    <>
+      <svg width="1080" height="1920" style={{position: 'absolute', left: 0, top: 0, opacity: p * 0.9}}>
+        <line x1={from.x} y1={from.y} x2={x} y2={y + flo} stroke={LIME} strokeWidth={4} strokeDasharray="14 10" />
+        <circle cx={from.x} cy={from.y} r={10 + 4 * Math.sin(l / 4)} fill={LIME} />
+      </svg>
+      <div style={{position: 'absolute', left: x - to.w / 2, top: y - to.h / 2 + flo, width: to.w, height: to.h, transform: `scale(${sc}) rotate(${-4 * (1 - pin) - 2}deg)`, opacity: clamp(p * 1.6), borderRadius: 38, border: `6px solid ${LIME}`, boxShadow: '0 30px 80px #000b, 0 0 70px #97d13160', overflow: 'hidden', background: '#0b0e13'}}>
+        <Img src={staticFile('aviso5/plan.png')} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+        <div style={{position: 'absolute', left: 0, right: 0, top: `${scan * 100}%`, height: 6, background: LIME, boxShadow: '0 0 24px #97d131', opacity: scan < 1 ? 1 : 0}} />
+      </div>
+      {label && (
+        <div style={{position: 'absolute', left: x - to.w / 2, top: y - to.h / 2 + flo - 74, width: to.w, textAlign: 'center', opacity: clamp(p * 1.6), transform: `translateY(${(1 - pin) * 30}px)`, fontFamily: 'Poppins', fontWeight: 800, fontSize: 40, color: INK}}>
+          <span style={{background: LIME, padding: '8px 24px', borderRadius: 14, boxShadow: '0 10px 30px #97d13160'}}>{label}</span>
+        </div>
+      )}
+    </>
+  );
+};
+
+/* ------------ escena ------------ */
+const SceneBody = ({s, f, shift = 0}: {s: any; f: number; shift?: number}) => {
+  const cfg = HAVE[s.scene];
+  if (!cfg) {
+    const l = f - s.f0; const d2 = interpolate(l, [0, s.f1 - s.f0], [1.04, 1.1]);
     return (
-      <AbsoluteFill style={{background: INK, overflow: 'hidden'}}>
-        <AbsoluteFill style={{transform: `scale(${drift})`}}>
-          <Sequence from={s.f0} durationInFrames={s.f1 - s.f0}>
-            <OffthreadVideo src={staticFile(h.src)} startFrom={Math.round(h.ss * FPS)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-          </Sequence>
-          {s.scene === 'L02a' && (
-            <Sequence from={cardioF} durationInFrames={s.f1 - cardioF}>
-              <OffthreadVideo src={staticFile(L02B.src)} startFrom={Math.round(L02B.ss * FPS)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-            </Sequence>
-          )}
-        </AbsoluteFill>
+      <AbsoluteFill style={{background: 'linear-gradient(165deg,#222c3d 0%,#161c27 55%,#10141b 100%)', overflow: 'hidden'}}>
+        <AbsoluteFill style={{transform: `scale(${d2})`, opacity: 0.5, backgroundImage: 'linear-gradient(#ffffff10 2px,transparent 2px),linear-gradient(90deg,#ffffff10 2px,transparent 2px)', backgroundSize: '90px 90px'}} />
+        <div style={{position: 'absolute', left: 0, right: 0, top: 640, textAlign: 'center', fontFamily: 'Poppins', color: '#ffffff35'}}>
+          <div style={{fontSize: 150, fontWeight: 800, letterSpacing: 6}}>{s.scene}</div>
+          <div style={{fontSize: 40, fontWeight: 600}}>{DESC[s.scene] || ''}</div>
+          <div style={{fontSize: 28, marginTop: 14}}>(aqui va el clip de Flow)</div>
+        </div>
       </AbsoluteFill>
     );
   }
-  const d2 = interpolate(l, [0, s.f1 - s.f0], [1.04, 1.1]);
+  const idx = cfg.matte ? Math.min(clipIdx(cfg, s, f), MT[cfg.matte].length - 1) : 0;
+  const mpath = cfg.matte ? staticFile(`aviso5/matte/${cfg.matte}/${String(Math.max(0, idx)).padStart(4, '0')}.png`) : '';
   return (
-    <AbsoluteFill style={{background: 'linear-gradient(165deg,#222c3d 0%,#161c27 55%,#10141b 100%)', overflow: 'hidden'}}>
-      <AbsoluteFill style={{transform: `scale(${d2})`, opacity: 0.5, backgroundImage: 'linear-gradient(#ffffff10 2px,transparent 2px),linear-gradient(90deg,#ffffff10 2px,transparent 2px)', backgroundSize: '90px 90px'}} />
-      <div style={{position: 'absolute', left: 0, right: 0, top: 640, textAlign: 'center', fontFamily: 'Poppins', color: '#ffffff35'}}>
-        <div style={{fontSize: 150, fontWeight: 800, letterSpacing: 6}}>{s.scene}</div>
-        <div style={{fontSize: 40, fontWeight: 600}}>{DESC[s.scene] || ''}</div>
-        <div style={{fontSize: 28, marginTop: 14}}>(aqui va el clip de Flow)</div>
-      </div>
+    <AbsoluteFill style={{background: INK, overflow: 'hidden'}}>
+      <AbsoluteFill><Vid cfg={cfg} s={s} shift={shift} /></AbsoluteFill>
+      {s.scene === 'L02a' && (
+        <Sequence from={cardioF} durationInFrames={s.f1 - cardioF}>
+          <OffthreadVideo src={staticFile(L02B.src)} startFrom={Math.round(L02B.ss * FPS)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+        </Sequence>
+      )}
+      {cfg.behind && cfg.matte && <BehindText cfg={cfg} f={f} />}
+      {cfg.matte && (
+        <AbsoluteFill style={{WebkitMaskImage: `url(${mpath})`, maskImage: `url(${mpath})`, WebkitMaskSize: '100% 100%', maskSize: '100% 100%', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat'}}>
+          <Vid cfg={cfg} s={s} shift={shift} />
+        </AbsoluteFill>
+      )}
+    </AbsoluteFill>
+  );
+};
+const Scene = ({s}: {s: any}) => {
+  const f = useCurrentFrame();
+  const cfg = HAVE[s.scene];
+  const l = f - s.f0;
+  let z = 1 + 0.05 * (l / (s.f1 - s.f0)); let ox = 540, oy = 960;
+  if (cfg && cfg.follow) {
+    const t0 = wfind(cfg.follow.v, cfg.follow.w) - 4;
+    const k = ease(clamp((f - t0) / 18));
+    z = 1 + (cfg.follow.z - 1) * k + 0.04 * clamp((f - t0 - 18) / 60); ox = cfg.follow.x; oy = cfg.follow.y;
+  }
+  return (
+    <AbsoluteFill style={{transform: `scale(${z})`, transformOrigin: `${ox}px ${oy}px`}}>
+      <SceneBody s={s} f={f} />
     </AbsoluteFill>
   );
 };
 
-/* ------------ carril de semanas ------------ */
-const WEEK_START: Record<number, number> = {};
-SH.forEach((s) => { if (s.week > 0 && WEEK_START[s.week] === undefined) WEEK_START[s.week] = s.f0; });
+/* ------------ carril de semanas + cartel que vuela al punto ------------ */
+const HITS: {f: number; n: number}[] = [];
+(() => { const first = (v: string, p: string, n: number) => HITS.push({f: wfind(v, p), n}); first('V02', 'semana', 1); first('V04', 'semana', 2); first('V07', 'semana', 3); first('V09', 'semana', 4); first('V10', 'quinta', 5); })();
+const FLY = 44;
+const GAP = 112, X0 = 560, RAIL_Y = 1228;
 const Rail = () => {
   const f = useCurrentFrame();
-  const GAP = 112, X0 = 560;
   const xs = [0, 1, 2, 3, 4].map((i) => X0 + i * GAP);
-  const cur = [1, 2, 3, 4, 5].filter((w) => WEEK_START[w] !== undefined && f >= WEEK_START[w]).length;
+  const when = (w: number) => { const h = HITS.find((x) => x.n === w); return h ? h.f + FLY : undefined; };
+  const cur = [1, 2, 3, 4, 5].filter((w) => { const t = when(w); return t !== undefined && f >= t; }).length;
   const o = clamp(f / 10);
   return (
-    <div style={{position: 'absolute', left: 0, top: 1228, width: 1080, height: 70, opacity: o}}>
+    <div style={{position: 'absolute', left: 0, top: RAIL_Y, width: 1080, height: 70, opacity: o}}>
       <div style={{position: 'absolute', left: X0, top: 31, width: GAP * 4, height: 7, borderRadius: 4, background: '#ffffff30'}} />
       <div style={{position: 'absolute', left: X0, top: 31, width: Math.max(0, (cur - 1) * GAP), height: 7, borderRadius: 4, background: LIME}} />
       {xs.map((x, i) => {
-        const w = i + 1; const done = cur >= w; const st = WEEK_START[w];
-        const sc = st !== undefined && f >= st ? 1 + 0.35 * Math.max(0, 1 - (f - st) / 14) : 1;
+        const w = i + 1; const done = cur >= w; const st = when(w);
+        const sc = st !== undefined && f >= st ? 1 + 0.5 * Math.max(0, 1 - (f - st) / 12) : 1;
         return (
           <div key={i} style={{position: 'absolute', left: x - 24, top: 10, width: 48, height: 48, borderRadius: 24, transform: `scale(${sc})`, background: done ? LIME : INK, border: `4px solid ${done ? LIME : '#ffffff55'}`, color: done ? INK : '#c8cfd9', fontFamily: 'Poppins', fontWeight: 800, fontSize: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: done ? '0 0 22px #97d13170' : '0 4px 14px #0008'}}>
             {w}
@@ -90,8 +206,28 @@ const Rail = () => {
     </div>
   );
 };
+const WeekCard = () => {
+  const f = useCurrentFrame();
+  const h = HITS.find((x) => f >= x.f && f < x.f + FLY + 2);
+  if (!h) return null;
+  const l = f - h.f;
+  const slide = interpolate(l, [0, 12], [-460, 0], {easing: ease, extrapolateRight: 'clamp'});
+  const p = ease(clamp((l - 26) / (FLY - 26)));
+  const dotX = X0 + (h.n - 1) * GAP, dotY = RAIL_Y + 34;
+  const cx = 540 + (dotX - 540) * p + slide * (1 - p), cy = 800 + (dotY - 800) * p;
+  const sc = 1 - 0.88 * p;
+  const o = clamp(l / 3) * (1 - clamp((l - (FLY - 4)) / 4));
+  return (
+    <div style={{position: 'absolute', left: cx, top: cy, transform: `translate(-50%,-50%) scale(${sc})`, opacity: o, fontFamily: 'Poppins', fontWeight: 800}}>
+      <div style={{display: 'inline-flex', alignItems: 'center', gap: 26, background: LIME, color: INK, padding: '10px 54px 10px 36px', borderRadius: 24, boxShadow: '0 16px 60px #97d13160'}}>
+        <span style={{fontSize: 70, letterSpacing: 3}}>SEMANA</span>
+        <span style={{fontSize: 170, lineHeight: 1}}>{h.n}</span>
+      </div>
+    </div>
+  );
+};
 
-/* ------------ narrador en circulo ------------ */
+/* ------------ narrador ------------ */
 const Narrator = ({s}: {s: any}) => {
   const f = useCurrentFrame();
   const l = f - s.f0;
@@ -104,7 +240,7 @@ const Narrator = ({s}: {s: any}) => {
   );
 };
 
-/* ------------ subtitulos ------------ */
+/* ------------ subtitulos: revelado con mascara, glow y glitch en palabras de impacto ------------ */
 type W = {t: string; imp: boolean; f: number};
 type Chunk = {v: string; words: W[]; f0: number; f1: number};
 const CHUNKS: Chunk[] = [];
@@ -131,15 +267,19 @@ const Captions = () => {
   const c = CHUNKS.find((k) => f >= k.f0 - 1 && f < k.f1);
   if (!c) return null;
   const l = f - c.f0;
+  const reveal = ease(clamp((l + 1) / 7));                      // mascara que revela de izquierda a derecha
+  const out = clamp((f - (c.f1 - 4)) / 4);                      // salida encadenada: sube mientras entra el siguiente
   return (
-    <div style={{position: 'absolute', left: 50, right: 50, top: 930, height: 260, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignContent: 'center', gap: '8px 26px', transform: `scale(${0.94 + 0.06 * pop(l, 14, 240)})`, opacity: clamp(l / 3 + 0.4)}}>
+    <div style={{position: 'absolute', left: 50, right: 50, top: 930, height: 260, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignContent: 'center', gap: '8px 26px', clipPath: `inset(-40px ${(1 - reveal) * 100}% -40px 0)`, transform: `translateY(${-out * 34}px)`, opacity: 1 - out * 0.9}}>
       {c.words.map((w, i) => {
         if (f < w.f - 1) return null;
         const nxt = c.words[i + 1];
         const active = f >= w.f && (!nxt || f < nxt.f);
-        const p = pop(f - w.f, 10, 260);
+        const lw = f - w.f; const p = pop(lw, 9, 280);
+        const glitch = w.imp && lw >= 0 && lw < 4 ? (lw % 2 === 0 ? 5 : -5) : 0;
+        const glow = w.imp ? '0 0 26px #97d131, 0 0 64px #97d13190, ' : '';
         return (
-          <span key={i} style={{display: 'inline-block', position: 'relative', fontFamily: 'Poppins', fontWeight: 800, fontSize: w.imp ? 96 : 82, lineHeight: 1.05, letterSpacing: 1, padding: '4px 8px', transform: `scale(${0.75 + 0.25 * p * (active ? 1.08 : 1)})`, color: active || w.imp ? LIME : TXT, WebkitTextStroke: '12px ' + INK, paintOrder: 'stroke fill', textShadow: '0 8px 22px #000b'}}>
+          <span key={i} style={{display: 'inline-block', position: 'relative', fontFamily: 'Poppins', fontWeight: 800, fontSize: w.imp ? 100 : 82, lineHeight: 1.05, letterSpacing: 1, padding: '4px 8px', transform: `scale(${(w.imp ? 0.6 : 0.75) + (w.imp ? 0.5 : 0.25) * p * (active ? 1.06 : 1)}) translateX(${glitch}px)`, color: active || w.imp ? LIME : TXT, WebkitTextStroke: '12px ' + INK, paintOrder: 'stroke fill', textShadow: glow + '0 8px 22px #000b'}}>
             {disp(w)}
           </span>
         );
@@ -148,30 +288,9 @@ const Captions = () => {
   );
 };
 
-/* ------------ cartel SEMANA n ------------ */
-const WeekCard = () => {
-  const f = useCurrentFrame();
-  const hits: {f: number; n: number}[] = [];
-  const first = (v: string, p: string, n: number) => { const w = tl.words[v].find((x: W) => x.t.toLowerCase().startsWith(p)); if (w) hits.push({f: w.f, n}); };
-  first('V02', 'semana', 1); first('V04', 'semana', 2); first('V07', 'semana', 3); first('V09', 'semana', 4); first('V10', 'quinta', 5);
-  const h = hits.find((x) => f >= x.f && f < x.f + 40);
-  if (!h) return null;
-  const l = f - h.f;
-  const o = clamp(l / 4) * clamp((40 - l) / 6);
-  const x = interpolate(l, [0, 12], [-420, 0], {easing: ease, extrapolateRight: 'clamp'});
-  return (
-    <div style={{position: 'absolute', left: 0, right: 0, top: 740, textAlign: 'center', opacity: o, transform: `translateX(${x}px)`, fontFamily: 'Poppins', fontWeight: 800}}>
-      <div style={{display: 'inline-flex', alignItems: 'center', gap: 26, background: LIME, color: INK, padding: '10px 54px 10px 36px', borderRadius: 24, boxShadow: '0 16px 60px #97d13160'}}>
-        <span style={{fontSize: 70, letterSpacing: 3}}>SEMANA</span>
-        <span style={{fontSize: 170, lineHeight: 1}}>{h.n}</span>
-      </div>
-    </div>
-  );
-};
-
-/* ------------ cierre ------------ */
-const Chip = ({s}: {s: any}) => {
-  const f = useCurrentFrame(); const l = f - (s.f0 + 20);
+/* ------------ oferta y cierre ------------ */
+const OfferChip = ({s}: {s: any}) => {
+  const f = useCurrentFrame(); const l = f - (wfind('V12', 'gratis') - 2);
   if (s.scene !== 'L12' || l < 0) return null;
   const y = interpolate(l, [0, 12], [80, 0], {easing: ease, extrapolateRight: 'clamp'});
   return (
@@ -203,6 +322,7 @@ const EndCard = ({s}: {s: any}) => {
 };
 
 /* ------------ composicion ------------ */
+const TR = 10;   // fotogramas de la transicion "logo como mascara" antes del plano 12
 export const Aviso5 = () => {
   useFonts();
   const f = useCurrentFrame();
@@ -211,15 +331,29 @@ export const Aviso5 = () => {
   const punch = s.i > 1 ? 0.06 * Math.max(0, 1 - l / 9) ** 2 : 0;
   const flash = s.i > 1 ? 0.35 * Math.max(0, 1 - l / 4) : 0;
   const fin = s.scene === 'FIN';
+  const s12 = SH.find((x) => x.scene === 'L12');
+  const inTr = !!s12 && f >= s12.f0 - TR && f < s12.f0;
+  const sz = inTr ? 160 * Math.pow(30, ease(clamp((f - (s12.f0 - TR)) / TR))) : 0;   // el logo crece hasta llenar la pantalla
+  const s3 = SH.find((x) => x.scene === 'L03');
+  const a3 = wfind('V03', 'plan') + 4;
+  const a12 = wfind('V12', 'arranca') - 6;
   return (
     <AbsoluteFill style={{background: INK}}>
       <AbsoluteFill style={{transform: `scale(${1 + punch})`}}>
         {fin ? <EndCard s={s} /> : <Scene s={s} />}
+        {inTr && (
+          <AbsoluteFill style={{WebkitMaskImage: `url(${staticFile('gymevo/logo_mark.png')})`, maskImage: `url(${staticFile('gymevo/logo_mark.png')})`, WebkitMaskSize: `${sz}px ${sz}px`, maskSize: `${sz}px ${sz}px`, WebkitMaskPosition: '50% 42%', maskPosition: '50% 42%', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat'}}>
+            <SceneBody s={s12} f={f} shift={TR} />
+          </AbsoluteFill>
+        )}
       </AbsoluteFill>
+      {s.scene === 'L03' && <AppCard f={f} t0={a3} tOut={s3.f1 - 18} from={{x: 540, y: 1150}} to={{x: 800, y: 600, w: 330, h: 560}} label="TU PLAN REAL" />}
+      {s.scene === 'L12' && <AppCard f={f} t0={a12} tOut={wfind('V12', 'descarga') - 4} from={{x: 270, y: 548}} to={{x: 600, y: 640, w: 480, h: 830}} label="GymEvoApp" />}
+      {s.scene === 'L10' && HAVE.L10.hud && <Hud cfg={HAVE.L10} s={s} f={f} />}
       {!fin && <Rail />}
       {!fin && <Narrator s={s} />}
       <WeekCard />
-      <Chip s={s} />
+      <OfferChip s={s} />
       <Captions />
       <AbsoluteFill style={{background: '#fff', opacity: flash, pointerEvents: 'none'}} />
     </AbsoluteFill>
