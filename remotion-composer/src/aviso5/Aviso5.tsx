@@ -35,10 +35,10 @@ const HAVE: Record<string, Cfg> = {
   L04: {src: 'aviso5/scenes/L04.mp4', ss: 0.3},
   L05: {src: 'aviso5/scenes/L05.mp4', ss: 0.3},
   L06: {src: 'aviso5/scenes/L06.mp4', ss: 0.5},
-  L07a: {src: 'aviso5/scenes/L07b.mp4', ss: 0, rate: 0.78, matte: 'L07b', behind: {text: 'FUERZA', v: 'V07', w: 'levant'}},
-  L09: {src: 'aviso5/scenes/L09.mp4', ss: 0.3, matte: 'L09', behind: {text: 'EVO', v: 'V09', w: 'energ'}},
-  L10: {src: 'aviso5/scenes/L10.mp4', ss: 0.3, matte: 'L10', behind: {text: 'RUTINA', v: 'V10', w: 'rutina'}, hud: true},
-  L11: {src: 'aviso5/scenes/L11.mp4', ss: 0, rate: 0.8, matte: 'L11', behind: {text: 'IA', v: 'V11', w: 'i'}},
+  L07a: {src: 'aviso5/scenes/L07b.mp4', ss: 0, rate: 0.78, },
+  L09: {src: 'aviso5/scenes/L09.mp4', ss: 0.3, },
+  L10: {src: 'aviso5/scenes/L10.mp4', ss: 0.3, matte: 'L10', hud: true},
+  L11: {src: 'aviso5/scenes/L11.mp4', ss: 0, rate: 0.8, },
   L12: {src: 'aviso5/scenes/L12.mp4', ss: 0.1, rate: 0.72, follow: {x: 270, y: 548, z: 1.85, v: 'V12', w: 'gratis'}},
 };
 const L02B = {src: 'aviso5/scenes/L02b.mp4', ss: 1.0};
@@ -54,21 +54,6 @@ const Vid = ({cfg, s, shift = 0}: {cfg: Cfg; s: any; shift?: number}) => {
   );
 };
 const clipIdx = (cfg: Cfg, s: any, f: number) => Math.round(cfg.ss * FPS + (f - s.f0) * (cfg.rate || 1));
-
-/* texto gigante que queda DETRAS de la persona */
-const BehindText = ({cfg, f}: {cfg: Cfg; f: number}) => {
-  const b = cfg.behind!; const t0 = wfind(b.v, b.w) - 2; const l = f - t0;
-  if (l < 0) return null;
-  const rev = ease(clamp(l / 12));
-  const len = b.text.length;
-  const fs = Math.min(560, Math.floor(1000 / (0.7 * len)));
-  const sc = 1 + Math.min(l, 80) * 0.0016;
-  return (
-    <div style={{position: 'absolute', left: 0, right: 0, top: 620 - fs * 0.35, textAlign: 'center', fontFamily: 'Poppins', fontWeight: 800, fontSize: fs, lineHeight: 1, color: LIME, letterSpacing: 4, opacity: 0.96, transform: `scale(${sc})`, clipPath: `inset(0 ${(1 - rev) * 100}% 0 0)`, textShadow: '0 0 60px #97d13170, 0 20px 60px #0009'}}>
-      {b.text}
-    </div>
-  );
-};
 
 /* HUD anclado al cuerpo (repeticiones) usando la mascara */
 const REPS: Record<string, number[]> = {};
@@ -143,8 +128,6 @@ const SceneBody = ({s, f, shift = 0}: {s: any; f: number; shift?: number}) => {
       </AbsoluteFill>
     );
   }
-  const idx = cfg.matte ? Math.min(clipIdx(cfg, s, f), MT[cfg.matte].length - 1) : 0;
-  const mpath = cfg.matte ? staticFile(`aviso5/matte/${cfg.matte}/${String(Math.max(0, idx)).padStart(4, '0')}.png`) : '';
   return (
     <AbsoluteFill style={{background: INK, overflow: 'hidden'}}>
       <AbsoluteFill><Vid cfg={cfg} s={s} shift={shift} /></AbsoluteFill>
@@ -153,12 +136,6 @@ const SceneBody = ({s, f, shift = 0}: {s: any; f: number; shift?: number}) => {
           <OffthreadVideo src={staticFile(L02B.src)} startFrom={Math.round(L02B.ss * FPS)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
         </Sequence>
       )}
-      {cfg.behind && cfg.matte && <BehindText cfg={cfg} f={f} />}
-      {cfg.matte && (
-        <AbsoluteFill style={{WebkitMaskImage: `url(${mpath})`, maskImage: `url(${mpath})`, WebkitMaskSize: '100% 100%', maskSize: '100% 100%', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat'}}>
-          <Vid cfg={cfg} s={s} shift={shift} />
-        </AbsoluteFill>
-      )}
     </AbsoluteFill>
   );
 };
@@ -166,14 +143,28 @@ const Scene = ({s}: {s: any}) => {
   const f = useCurrentFrame();
   const cfg = HAVE[s.scene];
   const l = f - s.f0;
-  let z = 1 + 0.05 * (l / (s.f1 - s.f0)); let ox = 540, oy = 960;
+  let z = 1 + 0.04 * (l / (s.f1 - s.f0)); let ox = 540, oy = 960;
   if (cfg && cfg.follow) {
     const t0 = wfind(cfg.follow.v, cfg.follow.w) - 4;
     const k = ease(clamp((f - t0) / 18));
     z = 1 + (cfg.follow.z - 1) * k + 0.04 * clamp((f - t0 - 18) / 60); ox = cfg.follow.x; oy = cfg.follow.y;
+  } else {
+    // golpe de zoom al empezar cada frase (ritmo de corte sin cortar la escena)
+    const mine = CHUNKS.filter((c) => c.v === s.v);
+    let i = -1; mine.forEach((c, k) => { if (f >= c.f0) i = k; });
+    if (i >= 0) {
+      const lv = (k: number) => (k % 2 === 0 ? 0 : 0.1);
+      const kk = ease(clamp((f - mine[i].f0) / 5));
+      const from = i > 0 ? lv(i - 1) : 0;
+      z += from + (lv(i) - from) * kk;
+      ox = [540, 420, 660][i % 3]; oy = [900, 760, 1000][i % 3];
+    }
   }
+  // temblor corto cuando se dice una palabra de impacto
+  let dx = 0, dy = 0;
+  (tl.words[s.v] || []).forEach((w: any) => { const a = f - w.f; if (w.imp && a >= 0 && a < 6) { const m = 1 - a / 6; dx = (a % 2 ? 1 : -1) * 9 * m; dy = (a % 2 ? -1 : 1) * 6 * m; } });
   return (
-    <AbsoluteFill style={{transform: `scale(${z})`, transformOrigin: `${ox}px ${oy}px`}}>
+    <AbsoluteFill style={{transform: `translate(${dx}px, ${dy}px) scale(${z})`, transformOrigin: `${ox}px ${oy}px`}}>
       <SceneBody s={s} f={f} />
     </AbsoluteFill>
   );
@@ -243,7 +234,7 @@ const Narrator = ({s}: {s: any}) => {
 /* ------------ subtitulos: revelado con mascara, glow y glitch en palabras de impacto ------------ */
 type W = {t: string; imp: boolean; f: number};
 type Chunk = {v: string; words: W[]; f0: number; f1: number};
-const CHUNKS: Chunk[] = [];
+let CHUNKS: Chunk[] = [];
 Object.keys(tl.words).forEach((v) => {
   let cur: W[] = [];
   const flush = () => { if (cur.length) { CHUNKS.push({v, words: cur, f0: cur[0].f, f1: 0}); cur = []; } };
@@ -257,29 +248,33 @@ Object.keys(tl.words).forEach((v) => {
   flush();
 });
 const vEnd = (v: string) => Math.round((tl.voices[v].T + tl.voices[v].dv) * FPS);
-CHUNKS.forEach((c, i) => { const n = CHUNKS[i + 1]; c.f1 = n && n.v === c.v ? n.f0 : vEnd(c.v) + 10; });
+// la frase termina cuando empieza la siguiente o 3 fotogramas despues de la voz: nunca invade el plano siguiente
+CHUNKS.forEach((c, i) => { const n = CHUNKS[i + 1]; c.f1 = n && n.v === c.v ? n.f0 : vEnd(c.v) + 3; });
+// el cartel de semana ya dice "SEMANA n": se quita ese subtitulo para no duplicar
+CHUNKS = CHUNKS.filter((c) => !(c.words.length <= 2 && /^(semana|quinta)/.test(norm(c.words[0].t))));
 const disp = (w: W) => (w.t === 'Yim' ? 'GymEvoApp' : w.t === 'I' ? 'IA' : w.t).toUpperCase();
 
 const Captions = () => {
   const f = useCurrentFrame();
   const s = shotAt(f);
   if (s.scene === 'FIN') return null;
-  const c = CHUNKS.find((k) => f >= k.f0 - 1 && f < k.f1);
+  const c = CHUNKS.find((k) => f >= k.f0 && f < k.f1 && f < s.f1);
   if (!c) return null;
   const l = f - c.f0;
-  const reveal = ease(clamp((l + 1) / 7));                      // mascara que revela de izquierda a derecha
-  const out = clamp((f - (c.f1 - 4)) / 4);                      // salida encadenada: sube mientras entra el siguiente
+  const reveal = ease(clamp((l + 1) / 6));                      // mascara que revela de izquierda a derecha
+  const out = clamp((f - (c.f1 - 3)) / 3);                      // salida rapida, ya sin la frase siguiente encima
   return (
-    <div style={{position: 'absolute', left: 50, right: 50, top: 930, height: 260, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignContent: 'center', gap: '8px 26px', clipPath: `inset(-40px ${(1 - reveal) * 100}% -40px 0)`, transform: `translateY(${-out * 34}px)`, opacity: 1 - out * 0.9}}>
+    <div style={{position: 'absolute', left: 40, right: 40, top: 905, height: 300, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignContent: 'center', gap: '10px 38px', clipPath: `inset(-60px ${(1 - reveal) * 100}% -60px 0)`, transform: `translateY(${-out * 30}px)`, opacity: 1 - out}}>
       {c.words.map((w, i) => {
-        if (f < w.f - 1) return null;
+        if (f < w.f) return null;
         const nxt = c.words[i + 1];
         const active = f >= w.f && (!nxt || f < nxt.f);
-        const lw = f - w.f; const p = pop(lw, 9, 280);
-        const glitch = w.imp && lw >= 0 && lw < 4 ? (lw % 2 === 0 ? 5 : -5) : 0;
-        const glow = w.imp ? '0 0 26px #97d131, 0 0 64px #97d13190, ' : '';
+        const lw = f - w.f; const p = pop(lw, 12, 300);
+        const slam = w.imp ? Math.max(0, 1 - lw / 5) : 0;
+        const glitch = w.imp && lw < 4 ? (lw % 2 === 0 ? 6 : -6) : 0;
+        const glow = w.imp ? '0 0 30px #97d131, 0 0 70px #97d13190, ' : '';
         return (
-          <span key={i} style={{display: 'inline-block', position: 'relative', fontFamily: 'Poppins', fontWeight: 800, fontSize: w.imp ? 100 : 82, lineHeight: 1.05, letterSpacing: 1, padding: '4px 8px', transform: `scale(${(w.imp ? 0.6 : 0.75) + (w.imp ? 0.5 : 0.25) * p * (active ? 1.06 : 1)}) translateX(${glitch}px)`, color: active || w.imp ? LIME : TXT, WebkitTextStroke: '12px ' + INK, paintOrder: 'stroke fill', textShadow: glow + '0 8px 22px #000b'}}>
+          <span key={i} style={{display: 'inline-block', position: 'relative', fontFamily: 'Poppins', fontWeight: 800, fontSize: w.imp ? 110 : 90, lineHeight: 1.05, letterSpacing: 1, padding: '2px 4px', transform: `translate(${glitch}px, ${(1 - p) * 26}px) scale(${0.92 + 0.08 * p + 0.16 * slam})`, color: active || w.imp ? LIME : TXT, WebkitTextStroke: '14px ' + INK, paintOrder: 'stroke fill', textShadow: glow + '0 8px 24px #000c'}}>
             {disp(w)}
           </span>
         );
@@ -331,7 +326,7 @@ export const Aviso5 = () => {
   const s = shotAt(f);
   const l = f - s.f0;
   const punch = s.i > 1 ? 0.06 * Math.max(0, 1 - l / 9) ** 2 : 0;
-  const flash = s.i > 1 ? 0.35 * Math.max(0, 1 - l / 4) : 0;
+  const flash = s.i > 1 ? 0.24 * Math.max(0, 1 - l / 3) : 0;
   const fin = s.scene === 'FIN';
   const s12 = SH.find((x) => x.scene === 'L12');
   const inTr = !!s12 && f >= s12.f0 - TR && f < s12.f0;
