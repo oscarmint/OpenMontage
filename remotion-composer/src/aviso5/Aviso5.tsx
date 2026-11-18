@@ -35,11 +35,11 @@ const HAVE: Record<string, Cfg> = {
   L04: {src: 'aviso5/scenes/L04.mp4', ss: 0.3},
   L05: {src: 'aviso5/scenes/L05.mp4', ss: 0.3},
   L06: {src: 'aviso5/scenes/L06.mp4', ss: 0.5},
-  L07a: {src: 'aviso5/scenes/L07b.mp4', ss: 0, rate: 0.8, matte: 'L07b', behind: {text: 'FUERZA', v: 'V07', w: 'levant'}},
+  L07a: {src: 'aviso5/scenes/L07b.mp4', ss: 0, rate: 0.78, matte: 'L07b', behind: {text: 'FUERZA', v: 'V07', w: 'levant'}},
   L09: {src: 'aviso5/scenes/L09.mp4', ss: 0.3, matte: 'L09', behind: {text: 'EVO', v: 'V09', w: 'energ'}},
   L10: {src: 'aviso5/scenes/L10.mp4', ss: 0.3, matte: 'L10', behind: {text: 'RUTINA', v: 'V10', w: 'rutina'}, hud: true},
-  L11: {src: 'aviso5/scenes/L11.mp4', ss: 0.3, matte: 'L11', behind: {text: 'IA', v: 'V11', w: 'i'}},
-  L12: {src: 'aviso5/scenes/L12.mp4', ss: 0.5, follow: {x: 270, y: 548, z: 1.85, v: 'V12', w: 'gratis'}},
+  L11: {src: 'aviso5/scenes/L11.mp4', ss: 0, rate: 0.8, matte: 'L11', behind: {text: 'IA', v: 'V11', w: 'i'}},
+  L12: {src: 'aviso5/scenes/L12.mp4', ss: 0.1, rate: 0.72, follow: {x: 270, y: 548, z: 1.85, v: 'V12', w: 'gratis'}},
 };
 const L02B = {src: 'aviso5/scenes/L02b.mp4', ss: 1.0};
 const cardioF = (tl.words['V02'].find((x: any) => norm(x.t).startsWith('cardio')) || {f: SH[1].f0 + 90}).f - 6;
@@ -181,14 +181,14 @@ const Scene = ({s}: {s: any}) => {
 
 /* ------------ carril de semanas + cartel que vuela al punto ------------ */
 const HITS: {f: number; n: number}[] = [];
-(() => { const first = (v: string, p: string, n: number) => HITS.push({f: wfind(v, p), n}); first('V02', 'semana', 1); first('V04', 'semana', 2); first('V07', 'semana', 3); first('V09', 'semana', 4); first('V10', 'quinta', 5); })();
+(() => { const first = (v: string, p: string, n: number) => { if (tl.words[v]) HITS.push({f: wfind(v, p), n}); }; first('V02', 'semana', 1); first('V04', 'semana', 2); first('V07', 'semana', 3); first('V09', 'semana', 4); first('V10', 'quinta', 5); })();
 const FLY = 44;
 const GAP = 112, X0 = 560, RAIL_Y = 1228;
 const Rail = () => {
   const f = useCurrentFrame();
   const xs = [0, 1, 2, 3, 4].map((i) => X0 + i * GAP);
   const when = (w: number) => { const h = HITS.find((x) => x.n === w); return h ? h.f + FLY : undefined; };
-  const cur = [1, 2, 3, 4, 5].filter((w) => { const t = when(w); return t !== undefined && f >= t; }).length;
+  const cur = Math.max(0, ...[1, 2, 3, 4, 5].filter((w) => { const t = when(w); return t !== undefined && f >= t; }));
   const o = clamp(f / 10);
   return (
     <div style={{position: 'absolute', left: 0, top: RAIL_Y, width: 1080, height: 70, opacity: o}}>
@@ -232,7 +232,7 @@ const Narrator = ({s}: {s: any}) => {
   const f = useCurrentFrame();
   const l = f - s.f0;
   const y = (1 - pop(l, 13, 200)) * 200;
-  const pad = String(f).padStart(5, '0');
+  const pad = String((s.of0 !== undefined ? s.of0 : s.f0) + (f - s.f0)).padStart(5, '0');
   return (
     <div style={{position: 'absolute', left: 0, top: 1292, width: 470, height: 628, transform: `translateY(${y}px)`}}>
       <Img src={staticFile(`aviso5/pip/${pad}.png`)} style={{width: 470, height: 628}} />
