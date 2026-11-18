@@ -85,7 +85,7 @@ const Hud = ({cfg, s, f}: {cfg: Cfg; s: any; f: number}) => {
   const reps = REPS[cfg.matte!] || [];
   const n = reps.filter((r) => r <= idx).length;
   if (n === 0 || f - s.f0 < 6) return null;
-  const x = clamp(m.cx, 200, 880), y = clamp(m.top - 120, 330, 800);
+  const x = Math.min(m.r + 175, 915), y = clamp(m.top + 20, 300, 800);
   return (
     <div style={{position: 'absolute', left: x - 150, top: y, width: 300, fontFamily: 'Poppins', fontWeight: 800}}>
       <div style={{display: 'flex', alignItems: 'center', gap: 12, background: '#12161ce6', border: `3px solid ${LIME}`, borderRadius: 18, padding: '10px 18px', boxShadow: '0 0 30px #97d13160', color: TXT, fontSize: 34}}>
@@ -292,9 +292,11 @@ const Captions = () => {
 const OfferChip = ({s}: {s: any}) => {
   const f = useCurrentFrame(); const l = f - (wfind('V12', 'gratis') - 2);
   if (s.scene !== 'L12' || l < 0) return null;
+  const hide = 1 - clamp((f - (wfind('V12', 'arranca') - 8)) / 6);
+  if (hide <= 0) return null;
   const y = interpolate(l, [0, 12], [80, 0], {easing: ease, extrapolateRight: 'clamp'});
   return (
-    <div style={{position: 'absolute', left: 0, right: 0, top: 790, textAlign: 'center', opacity: clamp(l / 5), transform: `translateY(${y}px)`}}>
+    <div style={{position: 'absolute', left: 0, right: 0, top: 790, textAlign: 'center', opacity: clamp(l / 5) * hide, transform: `translateY(${y}px)`}}>
       <span style={{display: 'inline-block', fontFamily: 'Poppins', fontWeight: 800, fontSize: 54, color: INK, background: LIME, padding: '14px 40px', borderRadius: 60, boxShadow: '0 10px 40px #97d13170'}}>7 DÍAS GRATIS · SIN TARJETA</span>
     </div>
   );
