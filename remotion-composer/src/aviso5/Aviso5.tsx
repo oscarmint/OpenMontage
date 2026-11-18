@@ -142,29 +142,15 @@ const SceneBody = ({s, f, shift = 0}: {s: any; f: number; shift?: number}) => {
 const Scene = ({s}: {s: any}) => {
   const f = useCurrentFrame();
   const cfg = HAVE[s.scene];
-  const l = f - s.f0;
-  let z = 1 + 0.04 * (l / (s.f1 - s.f0)); let ox = 540, oy = 960;
+  // camara FIJA. Unico movimiento: el acercamiento suave al telefono cuando se muestra la app (planos 3 y 12)
+  let z = 1; let ox = 540, oy = 960;
   if (cfg && cfg.follow) {
     const t0 = wfind(cfg.follow.v, cfg.follow.w) - 4;
-    const k = ease(clamp((f - t0) / 18));
-    z = 1 + (cfg.follow.z - 1) * k + 0.04 * clamp((f - t0 - 18) / 60); ox = cfg.follow.x; oy = cfg.follow.y;
-  } else {
-    // golpe de zoom al empezar cada frase (ritmo de corte sin cortar la escena)
-    const mine = CHUNKS.filter((c) => c.v === s.v);
-    let i = -1; mine.forEach((c, k) => { if (f >= c.f0) i = k; });
-    if (i >= 0) {
-      const lv = (k: number) => (k % 2 === 0 ? 0 : 0.1);
-      const kk = ease(clamp((f - mine[i].f0) / 5));
-      const from = i > 0 ? lv(i - 1) : 0;
-      z += from + (lv(i) - from) * kk;
-      ox = [540, 420, 660][i % 3]; oy = [900, 760, 1000][i % 3];
-    }
+    const k = ease(clamp((f - t0) / 24));
+    z = 1 + (cfg.follow.z - 1) * k; ox = cfg.follow.x; oy = cfg.follow.y;
   }
-  // temblor corto cuando se dice una palabra de impacto
-  let dx = 0, dy = 0;
-  (tl.words[s.v] || []).forEach((w: any) => { const a = f - w.f; if (w.imp && a >= 0 && a < 6) { const m = 1 - a / 6; dx = (a % 2 ? 1 : -1) * 9 * m; dy = (a % 2 ? -1 : 1) * 6 * m; } });
   return (
-    <AbsoluteFill style={{transform: `translate(${dx}px, ${dy}px) scale(${z})`, transformOrigin: `${ox}px ${oy}px`}}>
+    <AbsoluteFill style={{transform: `scale(${z})`, transformOrigin: `${ox}px ${oy}px`}}>
       <SceneBody s={s} f={f} />
     </AbsoluteFill>
   );
@@ -325,7 +311,7 @@ export const Aviso5 = () => {
   const f = useCurrentFrame();
   const s = shotAt(f);
   const l = f - s.f0;
-  const punch = s.i > 1 ? 0.06 * Math.max(0, 1 - l / 9) ** 2 : 0;
+  const punch = 0;
   const flash = s.i > 1 ? 0.24 * Math.max(0, 1 - l / 3) : 0;
   const fin = s.scene === 'FIN';
   const s12 = SH.find((x) => x.scene === 'L12');
