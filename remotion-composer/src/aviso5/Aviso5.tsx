@@ -27,7 +27,6 @@ type Cfg = {
   behind?: {text: string; v: string; w: string};
   follow?: {x: number; y: number; z: number; v: string; w: string};
   hud?: boolean;
-  loop?: {k: number; mss: number; mrate: number; repAt: number};
 };
 const HAVE: Record<string, Cfg> = {
   L01: {src: 'aviso5/scenes/L01.mp4', ss: 2.8},
@@ -38,7 +37,7 @@ const HAVE: Record<string, Cfg> = {
   L06: {src: 'aviso5/scenes/L06.mp4', ss: 0.5},
   L07a: {src: 'aviso5/scenes/L07b.mp4', ss: 0, rate: 0.78, },
   L09: {src: 'aviso5/scenes/L09.mp4', ss: 0.3, },
-  L10: {src: 'aviso5/scenes/L10_loop.mp4', ss: 0, matte: 'L10', hud: true, loop: {k: 75, mss: 2.0, mrate: 0.6, repAt: 40}},
+  L10: {src: 'aviso5/scenes/L10_v2.mp4', ss: 1.0, matte: 'L10_v2', hud: true},
   L11: {src: 'aviso5/scenes/L11.mp4', ss: 0, rate: 0.8, },
   L12: {src: 'aviso5/scenes/L12.mp4', ss: 0.1, rate: 0.72, follow: {x: 270, y: 548, z: 1.85, v: 'V12', w: 'gratis'}},
 };
@@ -66,14 +65,15 @@ Object.keys(MT).forEach((k) => {
   REPS[k] = ev;
 });
 const Hud = ({cfg, s, f}: {cfg: Cfg; s: any; f: number}) => {
-  const L = cfg.loop!; const l = f - s.f0;
-  const lp = l % L.k;
-  const idx = Math.min(Math.round(L.mss * FPS + lp * L.mrate), MT[cfg.matte!].length - 1);
+  const idx = Math.min(clipIdx(cfg, s, f), MT[cfg.matte!].length - 1);
   const m = MT[cfg.matte!][idx];
-  const n = l >= L.repAt ? Math.floor((l - L.repAt) / L.k) + 1 : 0;
-  if (n === 0 || l < 6) return null;
+  const reps = REPS[cfg.matte!] || [];
+  const start = Math.round(cfg.ss * FPS);
+  const n = reps.filter((r) => r >= start && r <= idx).length;
+  if (n === 0 || f - s.f0 < 6) return null;
   const x = Math.min(m.r + 175, 915), y = clamp(m.top + 20, 300, 800);
-  const pulse = 1 + 0.12 * Math.max(0, 1 - ((l - L.repAt) % L.k) / 8);
+  const last = reps.filter((r) => r >= start && r <= idx).slice(-1)[0];
+  const pulse = 1 + 0.12 * Math.max(0, 1 - (idx - last) / 8);
   return (
     <div style={{position: 'absolute', left: x - 150, top: y, width: 300, fontFamily: 'Poppins', fontWeight: 800, transform: `scale(${pulse})`}}>
       <div style={{display: 'flex', alignItems: 'center', gap: 12, background: '#12161ce6', border: `3px solid ${LIME}`, borderRadius: 18, padding: '10px 18px', boxShadow: '0 0 30px #97d13160', color: TXT, fontSize: 34}}>
